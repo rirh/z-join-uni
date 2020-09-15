@@ -1,7 +1,7 @@
 {
-    "name" : "z-join-uni",
+    "name" : "Z Join",
     "appid" : "__UNI__BD9E16F",
-    "description" : "",
+    "description" : "温城说生态系统",
     "versionName" : "1.0.0",
     "versionCode" : "100",
     "transformPx" : false,
@@ -72,7 +72,7 @@
     "mp-toutiao" : {
         "usingComponents" : true
     },
-    "uniStatistics": {  
-        "enable": false
+    "uniStatistics" : {
+        "enable" : false
     }
 }
