@@ -1,6 +1,8 @@
 'use strict';
-
 const uniID = require('uni-id')
+const nodemailer = require("nodemailer");
+const mailer = require('./mailer')
+
 exports.main = async (event) => {
 	/* 如果你通过云函数Url访问
 	 * 使用GET时参数位于event.queryStringParameters
@@ -11,7 +13,8 @@ exports.main = async (event) => {
 	let payload = {}
 	uniCloud.logger.log(JSON.stringify(event))
 	let noCheckAction = ['register', 'checkToken', 'encryptPwd', 'login', 'loginByWeixin', 'sendSmsCode',
-		'setVerifyCode', 'loginBySms', 'loginByEmail']
+		'setVerifyCode', 'loginBySms', 'loginByEmail', 'sendEmailCode', 'verifyEmailCode'
+	]
 	let action = event.action || params.action;
 	if (noCheckAction.indexOf(action) === -1) {
 		if (!event.uniIdToken) {
@@ -29,6 +32,25 @@ exports.main = async (event) => {
 	let res = {}
 
 	switch (action) {
+		case 'verifyEmailCode':
+			res = await uniID.verifyCode({
+				email: params.email,
+				code: params.code,
+				type: params.type
+			})
+			uniCloud.logger.info(res)
+			break;
+		case 'sendEmailCode':
+			const {
+				code
+			} = await mailer(params.email)
+			res = await uniID.setVerifyCode({
+				email: params.email,
+				code,
+				expiresIn: 300,
+				type: params.type
+			})
+			break;
 		case 'register':
 			res = await uniID.register(params);
 			break;
