@@ -9,12 +9,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "copy-webpack-plugin": "^5.0.0",
     "inquirer": "^7.3.3",
     "moment": "^2.28.0",
     "ora": "^5.1.0",
-    "simple-git": "^2.20.1",
-    "webpack": "^4.44.2"
+    "simple-git": "^2.20.1"
   },
-  "devDependencies": {
-  }
+  "devDependencies": {}
 }

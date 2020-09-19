@@ -5,6 +5,12 @@
 			"style": {
 				"navigationBarTitleText": "Z Join"
 			}
+		}, {
+			"path": "pages/auth/login/login",
+			"style": {
+				"navigationStyle": "custom",
+				"backgroundColor": "#f6f6f6"
+			}
 		}
 	],
 	"globalStyle": {

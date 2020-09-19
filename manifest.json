@@ -52,7 +52,8 @@
             "ios" : {},
             /* SDK配置 */
             "sdkConfigs" : {
-                "ad" : {}
+                "ad" : {},
+                "share" : {}
             },
             "icons" : {
                 "android" : {
