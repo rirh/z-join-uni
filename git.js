@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-const git = require('simple-git')();
+const git = require('simple-git/promise')();
 const inquirer = require("inquirer");
 const ora = require("ora");
 const params = [
