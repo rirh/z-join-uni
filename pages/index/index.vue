@@ -137,8 +137,9 @@ export default {
 	display: grid;
 	place-items: center;
 	font-size: 32rpx;
-	margin: 5vw;
+	padding: 5vw;
 	color: #333;
+	background-image: url('https://vkceyugu.cdn.bspapp.com/VKCEYUGU-crypto2server/2cd35670-f9c6-11ea-8ff1-d5dcf8779628.JPG');
 }
 .textfild {
 	height: 80rpx;
