@@ -11,6 +11,16 @@
 				"navigationStyle": "custom",
 				"backgroundColor": "#f6f6f6"
 			}
+		}, {
+			"path": "pages/auth/privacy/privacy",
+			"style": {
+				"navigationBarTitleText": "隐私权政策"
+			}
+		}, {
+			"path": "pages/auth/protocol/protocol",
+			"style": {
+				"navigationBarTitleText": "用户服务协议"
+			}
 		}
 	],
 	"globalStyle": {

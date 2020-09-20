@@ -2,21 +2,28 @@
 	<view class="">
 		<view class="login">
 			<view class=""><text class="tips">Welcome Back</text></view>
-			<view class="textfield" style="margin-top: 50rpx;"><input placeholder="Email/Phone" focus style="flex: 1;" v-model="username" type="text" /></view>
-			<view class="textfield" style="margin-top: 40rpx;">
-				<input style="flex: 1;" focus="" v-model="code" placeholder="Password" type="password" />
-				<text @click="handleSendCode">{{ msg }}</text>
+			<view class="textfield" style="margin-top: 50rpx;">
+				<input placeholder="Email/Phone" :focus="focus_cursor === 'user'" style="flex: 1;" v-model="username" type="text" />
 			</view>
-			<view class=""><button class="sumbit">login</button></view>
+			<view class="textfield" style="margin-top: 40rpx;">
+				<input style="flex: 1;" :focus="focus_cursor === 'code'" v-model="code" placeholder="Code" type="text" />
+				<text @click.stop="handleSendCode">{{ msg }}</text>
+			</view>
+			<view class=""><button :loading="loading" @click="handle_sumbit" class="sumbit">登&nbsp;录</button></view>
 			<!-- #ifdef MP-WEIXIN -->
 			<button open-type="getUserInfo" class="auth" @getuserinfo="handle_login_wechat"><text class="iconfont">&#xe937;</text></button>
 			<!-- #endif -->
+			<view class="protocol">
+				请认证阅读并同意
+				<navigator url="/pages/auth/protocol/protocol">《用户服务协议》</navigator>
+				<navigator url="/pages/auth/privacy/privacy">《隐私权政策》</navigator>
+			</view>
 			<view class="" style="text-align: center; margin-top: 40rpx; font-size: 22rpx;">Z Join @{{ moment(timer.epoch).format('YYYY-MM-DD hh:mm:ss') }}</view>
 		</view>
 		<image class="bg-login" src="/static/login.svg" mode="scaleToFill"></image>
 		<image class="bg-login-top-right" src="/static/bg-login.svg" mode="scaleToFill"></image>
 		<image class="bg-login-bottom-left" :src="url" mode="aspectFill"></image>
-		<text class="iconfont back" :style="{ top: `${statusBarHeight}px` }">&#xe6aa;</text>
+		<text class="iconfont back" @click="handle_back" :style="{ top: `${statusBarHeight}px` }">&#xe6aa;</text>
 	</view>
 </template>
 
@@ -25,14 +32,15 @@ import moment from 'moment';
 export default {
 	data() {
 		return {
+			focus_cursor: 'user',
 			statusBarHeight: 0,
 			timer: {},
 			url: 'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-crypto2server/2b05e970-f9c6-11ea-9dfb-6da8e309e0d8.JPG',
-
 			msg: '发送验证码',
 			username: '',
 			code: '',
-			password: ''
+			password: '',
+			loading: false
 		};
 	},
 	onLoad() {
@@ -46,7 +54,11 @@ export default {
 	},
 	methods: {
 		moment,
+		handle_back() {
+			uni.navigateBack();
+		},
 		handle_login_wechat(e) {
+			uni.showLoading();
 			uni.getProvider({
 				service: 'oauth',
 				success: function(res) {
@@ -65,65 +77,118 @@ export default {
 										}
 									},
 									success(e) {
+										uni.hideLoading();
 										uni.showToast({
 											icon: 'none',
 											title: '欢迎加入z join',
 											position: 'bottom'
 										});
+									},
+									fail() {
+										uni.hideLoading();
 									}
 								});
 							},
 							fail(err) {
+								uni.hideLoading();
 								console.log('----------------');
 								console.log(err);
 								reject(new Error('微信登录失败'));
 							}
 						});
 					}
+				},
+				fail: () => {
+					uni.hideLoading();
 				}
 			});
 		},
 		async handle_sumbit() {
-			const {
-				result: { code, msg }
-			} = await uniCloud.callFunction({
-				name: 'user-center',
-				data: {
+			const isEmail = this.username.indexOf('@') > -1;
+			let params;
+			if (isEmail) {
+				params = {
 					action: 'verifyEmailCode',
 					params: {
 						email: this.username,
 						type: 'register',
 						code: this.code
 					}
+				};
+				if (!/.+@.+/.test(this.username)) {
+					uni.showModal({
+						content: '请输入正确的邮箱',
+						showCancel: false
+					});
+					return;
 				}
+			} else {
+				params = {
+					action: 'verifyMobileCode',
+					params: {
+						mobile: this.username,
+						type: 'register',
+						code: this.code
+					}
+				};
+				if (!/^1\d{10}$/.test(this.username)) {
+					uni.showModal({
+						content: '请输入正确的手机号',
+						showCancel: false
+					});
+					return;
+				}
+			}
+			if (!this.code) {
+				uni.showModal({
+					content: '请输入验证码',
+					showCancel: false
+				});
+				return;
+			}
+			this.loading = true;
+			const {
+				result: { code, msg }
+			} = await uniCloud.callFunction({
+				name: 'user-center',
+				data: params
 			});
 			if (!code) {
 				uniCloud.callFunction({
 					name: 'user-center',
 					data: {
-						action: 'register',
+						action: 'auth',
 						params: {
-							email: this.username,
-							password: this.password
+							[isEmail ? 'email' : 'mobile']: this.username,
+							code: this.code
 						}
 					},
-					success({ result: { code: rcode, msg: rmsg } }) {
-						if (!rcode) {
+					success: res => {
+						this.loading = false;
+						if (!res?.result?.code) {
+							uni.setStorageSync('uniIdToken', res.result.token);
 							uni.showToast({
 								icon: 'none',
 								title: '欢迎加入z join',
 								position: 'bottom'
 							});
+							uni.switchTab({
+								url: '/pages/index/index'
+							});
 						} else {
 							uni.showToast({
 								icon: 'none',
-								title: rmsg,
+								title: res?.result?.msg,
 								position: 'bottom'
 							});
 						}
+					},
+					fail(e) {
+						console.log(e);
 					}
 				});
 			} else {
+				this.loading = false;
 				uni.showToast({
 					icon: 'none',
 					title: msg,
@@ -131,18 +196,60 @@ export default {
 				});
 			}
 		},
-		handleSendCode() {
+		async handleSendCode() {
 			if (this.msg.endsWith('s')) return;
+			this.focus_cursor = 'code';
+			let params;
 			uni.showLoading();
-			uniCloud.callFunction({
-				name: 'user-center',
-				data: {
+			const isEmail = this.username.indexOf('@') > -1;
+			if (isEmail) {
+				params = {
 					action: 'sendEmailCode',
 					params: {
 						email: this.username,
 						type: 'register'
 					}
-				},
+				};
+				if (!/.+@.+/.test(this.username)) {
+					uni.showModal({
+						content: '请输入正确的邮箱',
+						showCancel: false
+					});
+					return;
+				}
+			} else {
+				params = {
+					action: 'sendSmsCode',
+					params: {
+						mobile: this.username,
+						type: 'register'
+					}
+				};
+				if (!/^1\d{10}$/.test(this.username)) {
+					uni.showModal({
+						content: '请输入正确的手机号',
+						showCancel: false
+					});
+					return;
+				}
+			}
+			let timer;
+			const start_timer = () => {
+				timer = Number(this.msg.split('s')[0]);
+				timer = timer - 1;
+				this.msg = `${timer}s`;
+				if (timer > 0) {
+					setTimeout(() => {
+						start_timer();
+					}, 1000);
+				} else {
+					this.msg = `发送验证码`;
+				}
+			};
+
+			uniCloud.callFunction({
+				name: 'user-center',
+				data: params,
 				success: res => {
 					uni.hideLoading();
 					if (!res.code) {
@@ -152,20 +259,7 @@ export default {
 							position: 'bottom'
 						});
 						this.msg = '60s';
-						let timer;
-
-						const start_timer = () => {
-							timer = Number(this.msg.split('s')[0]);
-							timer = timer - 1;
-							this.msg = `${timer}s`;
-							if (timer > 0) {
-								setTimeout(() => {
-									start_timer();
-								}, 1000);
-							} else {
-								this.msg = `发送验证码`;
-							}
-						};
+						this.code = '';
 						start_timer();
 					}
 				},
@@ -191,11 +285,12 @@ page {
 	align-items: flex-start;
 	height: 100%;
 	.login {
-		margin-top: 200rpx;
+		margin-top: 18vh;
 		min-height: 40vh;
 		width: 90vw;
+		z-index: 1;
 		.tips {
-			font-family: fantasy;
+			font-family: cursive;
 			font-weight: bold;
 			letter-spacing: 8rpx;
 		}
@@ -228,6 +323,16 @@ page {
 			margin: 0 auto;
 			margin-top: 40rpx;
 		}
+		.protocol {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			font-size: 24rpx;
+			margin-top: 40rpx;
+			> navigator {
+				color: #6c63ff;
+			}
+		}
 	}
 
 	.back {
@@ -238,7 +343,7 @@ page {
 		width: 100rpx;
 		line-height: 100rpx;
 		text-align: center;
-		font-size: 48rpx;
+		font-size: 58rpx;
 	}
 	.bg-login {
 		position: fixed;

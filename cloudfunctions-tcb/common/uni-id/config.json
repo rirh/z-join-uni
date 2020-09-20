@@ -1,6 +1,6 @@
 {
-	"passwordSecret": "tigerzh",
-	"tokenSecret": "tigerzh",
+	"passwordSecret": "zjoin",
+	"tokenSecret": "zjoin",
 	"tokenExpiresIn": 7200,
 	"passwordErrorLimit": 6,
 	"bindTokenToDevice": true,
@@ -34,10 +34,10 @@
 	},
 	"service": {
 		"sms": {
-			"name": "DCloud",
+			"name": "注册模版",
 			"codeExpiresIn": 300,
-			"smsKey": "your sms key",
-			"smsSecret": "your sms secret"
+			"smsKey": "5d94035c55f67ae32cd1966798406b64",
+			"smsSecret": "0104d42565d44ac6798552405524d22a"
 		}
 	}
 }

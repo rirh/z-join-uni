@@ -13,7 +13,8 @@ exports.main = async (event) => {
 	let payload = {}
 	uniCloud.logger.log(JSON.stringify(event))
 	let noCheckAction = ['register', 'checkToken', 'encryptPwd', 'login', 'loginByWeixin', 'sendSmsCode',
-		'setVerifyCode', 'loginBySms', 'loginByEmail', 'sendEmailCode', 'verifyEmailCode'
+		'setVerifyCode', 'loginBySms', 'loginByEmail', 'sendEmailCode', 'verifyEmailCode', 'verifyMobileCode',
+		'auth'
 	]
 	let action = event.action || params.action;
 	if (noCheckAction.indexOf(action) === -1) {
@@ -32,6 +33,45 @@ exports.main = async (event) => {
 	let res = {}
 
 	switch (action) {
+		case 'auth':
+			const login_code = 888888;
+			await uniID.setVerifyCode({
+				[params.email ? 'email' : 'mobile']: params.email || params.mobile,
+				code: login_code,
+				expiresIn: 300,
+				type: 'login'
+			})
+			if (params.email) {
+				res = await uniID.loginByEmail({
+					...params,
+					code: login_code
+				})
+			} else if (params.mobile) {
+				res = await uniID.loginBySms({
+					...params,
+					code: login_code
+				})
+			} else {
+				res = {
+					code: 801,
+					msg: '请输入账号'
+				}
+			}
+			if (res.code !== 0) {
+				res = await uniID.register({
+					...params,
+					password: '123456'
+				});
+			}
+			break;
+		case 'verifyMobileCode':
+			res = await uniID.verifyCode({
+				mobile: params.mobile,
+				code: params.code,
+				type: params.type
+			})
+			uniCloud.logger.info(res)
+			break;
 		case 'verifyEmailCode':
 			res = await uniID.verifyCode({
 				email: params.email,
@@ -150,7 +190,7 @@ exports.main = async (event) => {
 			}
 			break;
 	}
-
+	uniCloud.logger.log(res)
 	//返回数据给客户端
 	return res
 };
