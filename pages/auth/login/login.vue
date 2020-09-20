@@ -2,19 +2,21 @@
 	<view class="">
 		<view class="login">
 			<view class=""><text class="tips">Welcome Back</text></view>
-			<view class="textfield" style="margin-top: 50rpx;">
-				<input placeholder="Email/Phone" :focus="focus_cursor === 'user'" style="flex: 1;" v-model="username" type="text" />
-			</view>
 			<view class="textfield" style="margin-top: 40rpx;">
-				<input style="flex: 1;" :focus="focus_cursor === 'code'" v-model="code" placeholder="Code" type="number" />
+				<input placeholder="邮箱 / 手机号" :focus="focus_cursor === 'user'" style="flex: 1;" v-model="username" type="text" />
+			</view>
+			<view class="textfield" style="margin-top: 30rpx;">
+				<input style="flex: 1;" :focus="focus_cursor === 'code'" v-model="code" placeholder="验证码" type="number" />
 				<text @click.stop="handleSendCode">{{ msg }}</text>
 			</view>
-			<view class=""><button :loading="loading" @click="handle_sumbit" class="sumbit">登&nbsp;录</button></view>
+			<view class=""><button :loading="loading" @click="handle_sumbit" class="sumbit">登&nbsp;&nbsp;&nbsp;录</button></view>
 			<!-- #ifdef MP-WEIXIN -->
-			<button open-type="getUserInfo" class="auth" @getuserinfo="handle_login_wechat"><text class="iconfont">&#xe937;</text></button>
+			<button open-type="getUserInfo" class="auth" @getuserinfo="handle_login_wechat"><image class="wechat" src="/static/wechat.svg" mode="scaleToFill"></image></button>
 			<!-- #endif -->
+			<button open-type="getUserInfo" class="auth" @getuserinfo="handle_login_wechat"><image class="wechat" src="/static/wechat.svg" mode="scaleToFill"></image></button>
+
 			<view class="protocol">
-				<text @click.stop="handle_toggle_agreen" class="iconfont" style="margin-right: 15rpx;font-size: 28rpx;">{{ agreen ? '&#xe69f;' : '&#xe86b;' }}</text>
+				<image @click.stop="handle_toggle_agreen" class="" mode="scaleToFill" :src="`${agreen ? '/static/radio-seleted.svg' : '/static/radio.svg'}`"></image>
 				<text @click.stop="handle_toggle_agreen">请认证阅读并同意</text>
 				<navigator url="/pages/auth/protocol/protocol">《用户服务协议》</navigator>
 				<navigator url="/pages/auth/privacy/privacy">《隐私权政策》</navigator>
@@ -24,7 +26,7 @@
 		<image class="bg-login" src="/static/login.svg" mode="scaleToFill"></image>
 		<image class="bg-login-top-right" src="/static/bg-login.svg" mode="scaleToFill"></image>
 		<image class="bg-login-bottom-left" :src="url" mode="aspectFill"></image>
-		<text class="iconfont back" @click="handle_back" :style="{ top: `${statusBarHeight}px` }">&#xe6aa;</text>
+		<image class="back" src="/static/back.svg" @click="handle_back" :style="{ top: `${statusBarHeight}px` }"></image>
 	</view>
 </template>
 
@@ -323,6 +325,7 @@ page {
 			font-family: cursive;
 			font-weight: bold;
 			letter-spacing: 8rpx;
+			font-size: 36rpx;
 		}
 		.textfield {
 			height: 100rpx;
@@ -336,7 +339,7 @@ page {
 		}
 		.sumbit {
 			height: 80rpx;
-			margin-top: 60rpx;
+			margin-top: 50rpx;
 			width: 100%;
 			background-color: #000;
 			color: #fff;
@@ -345,13 +348,17 @@ page {
 			display: flex;
 			justify-content: center;
 			align-items: center;
-			border: 1rpx solid #000;
-			height: 90rpx;
-			width: 90rpx;
+			// border: 1rpx solid #000;
+			// height: 90rpx;
+			// width: 90rpx;
 			border-radius: 50%;
 			font-size: 60rpx;
 			margin: 0 auto;
-			margin-top: 40rpx;
+			margin-top: 60rpx;
+			.wechat {
+				height: 80rpx;
+				width: 80rpx;
+			}
 		}
 		.protocol {
 			display: flex;
@@ -360,6 +367,11 @@ page {
 			font-size: 24rpx;
 			margin-top: 40rpx;
 			z-index: 2;
+			> image {
+				height: 40rpx;
+				width: 40rpx;
+				margin-right: 10rpx;
+			}
 			> navigator {
 				color: #666;
 			}
@@ -368,11 +380,10 @@ page {
 
 	.back {
 		position: fixed;
-		left: 0;
+		left: 5vw;
 		top: 0;
-		height: 100rpx;
-		width: 100rpx;
-		line-height: 100rpx;
+		height: 60rpx;
+		width: 60rpx;
 		text-align: center;
 		font-size: 58rpx;
 	}
