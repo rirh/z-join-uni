@@ -6,7 +6,7 @@
 				<input placeholder="Email/Phone" :focus="focus_cursor === 'user'" style="flex: 1;" v-model="username" type="text" />
 			</view>
 			<view class="textfield" style="margin-top: 40rpx;">
-				<input style="flex: 1;" :focus="focus_cursor === 'code'" v-model="code" placeholder="Code" type="text" />
+				<input style="flex: 1;" :focus="focus_cursor === 'code'" v-model="code" placeholder="Code" type="number" />
 				<text @click.stop="handleSendCode">{{ msg }}</text>
 			</view>
 			<view class=""><button :loading="loading" @click="handle_sumbit" class="sumbit">登&nbsp;录</button></view>
@@ -14,7 +14,8 @@
 			<button open-type="getUserInfo" class="auth" @getuserinfo="handle_login_wechat"><text class="iconfont">&#xe937;</text></button>
 			<!-- #endif -->
 			<view class="protocol">
-				请认证阅读并同意
+				<text @click.stop="handle_toggle_agreen" class="iconfont" style="margin-right: 15rpx;font-size: 28rpx;">{{ agreen ? '&#xe69f;' : '&#xe86b;' }}</text>
+				<text @click.stop="handle_toggle_agreen">请认证阅读并同意</text>
 				<navigator url="/pages/auth/protocol/protocol">《用户服务协议》</navigator>
 				<navigator url="/pages/auth/privacy/privacy">《隐私权政策》</navigator>
 			</view>
@@ -40,24 +41,38 @@ export default {
 			username: '',
 			code: '',
 			password: '',
-			loading: false
+			loading: false,
+			agreen: true
 		};
 	},
 	onLoad() {
 		this.statusBarHeight = uni.getSystemInfoSync().statusBarHeight;
-		uniCloud.callFunction({
-			name: 'iso',
-			success: ({ result }) => {
-				this.timer = result;
-			}
+		this.$nextTick(() => {
+			uniCloud.callFunction({
+				name: 'iso',
+				success: ({ result }) => {
+					this.timer = result;
+				}
+			});
 		});
 	},
 	methods: {
 		moment,
+		handle_toggle_agreen() {
+			this.agreen = !this.agreen;
+		},
 		handle_back() {
 			uni.navigateBack();
 		},
 		handle_login_wechat(e) {
+			if (!this.agreen) {
+				uni.showToast({
+					icon: 'none',
+					position: 'bottom',
+					title: '请阅读并同意用户服务协议及隐私权政策'
+				});
+				return;
+			}
 			uni.showLoading();
 			uni.getProvider({
 				service: 'oauth',
@@ -83,13 +98,25 @@ export default {
 											title: '欢迎加入z join',
 											position: 'bottom'
 										});
+										uni.switchTab({
+											url: '/pages/index/index'
+										});
 									},
-									fail() {
+									fail(e) {
+										uni.showToast({
+											icon: 'none',
+											title: '欢迎加入z join',
+											position: 'bottom'
+										});
 										uni.hideLoading();
 									}
 								});
 							},
 							fail(err) {
+								uni.showModal({
+									content: err,
+									showCancel: false
+								});
 								uni.hideLoading();
 								console.log('----------------');
 								console.log(err);
@@ -104,6 +131,14 @@ export default {
 			});
 		},
 		async handle_sumbit() {
+			if (!this.agreen) {
+				uni.showToast({
+					icon: 'none',
+					position: 'bottom',
+					title: '请阅读并同意用户服务协议及隐私权政策'
+				});
+				return;
+			}
 			const isEmail = this.username.indexOf('@') > -1;
 			let params;
 			if (isEmail) {
@@ -167,11 +202,6 @@ export default {
 						this.loading = false;
 						if (!res?.result?.code) {
 							uni.setStorageSync('uniIdToken', res.result.token);
-							uni.showToast({
-								icon: 'none',
-								title: '欢迎加入z join',
-								position: 'bottom'
-							});
 							uni.switchTab({
 								url: '/pages/index/index'
 							});
@@ -200,7 +230,7 @@ export default {
 			if (this.msg.endsWith('s')) return;
 			this.focus_cursor = 'code';
 			let params;
-			uni.showLoading();
+
 			const isEmail = this.username.indexOf('@') > -1;
 			if (isEmail) {
 				params = {
@@ -246,7 +276,7 @@ export default {
 					this.msg = `发送验证码`;
 				}
 			};
-
+			uni.showLoading();
 			uniCloud.callFunction({
 				name: 'user-center',
 				data: params,
@@ -329,8 +359,9 @@ page {
 			align-items: center;
 			font-size: 24rpx;
 			margin-top: 40rpx;
+			z-index: 2;
 			> navigator {
-				color: #6c63ff;
+				color: #666;
 			}
 		}
 	}
@@ -353,7 +384,7 @@ page {
 	}
 	.bg-login-top-right {
 		position: fixed;
-		top: -240rpx;
+		top: -200rpx;
 		right: -100rpx;
 		filter: drop-shadow(-10rpx 10rpx 10rpx rgba(0, 0, 0, 0.7));
 		transform: rotate(180deg);

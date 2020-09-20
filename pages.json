@@ -21,8 +21,44 @@
 			"style": {
 				"navigationBarTitleText": "用户服务协议"
 			}
+		}, {
+			"path": "pages/discover/discover",
+			"style": {
+				"navigationBarTitleText": "发现"
+			}
+		}, {
+			"path": "pages/me/me",
+			"style": {
+				"navigationBarTitleText": "我的"
+			}
 		}
 	],
+	"tabBar": {
+		"color": "#6E6F74",
+		"selectedColor": "#000",
+		"borderStyle": "black",
+		"fontSize": "12px",
+		"height": "56px",
+		"list": [{
+				"pagePath": "pages/index/index",
+				"text": "首页",
+				"iconPath": "static/tabar/home.png",
+				"selectedIconPath": "static/tabar/home-seleted.png"
+			},
+			{
+				"pagePath": "pages/discover/discover",
+				"text": "发现",
+				"iconPath": "static/tabar/discover.png",
+				"selectedIconPath": "static/tabar/discover-seleted.png"
+			},
+			{
+				"pagePath": "pages/me/me",
+				"text": "我的",
+				"iconPath": "static/tabar/me.png",
+				"selectedIconPath": "static/tabar/me-seleted.png"
+			}
+		]
+	},
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "Z Join",
