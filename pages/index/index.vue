@@ -1,51 +1,149 @@
 <template>
-	<view class=""></view>
+	<view class="wapper">
+		<view class="card" v-for="(item, index) in list" :key="index">
+			<view class="">
+				<text>{{ item.contant }}</text>
+			</view>
+			<view class="createtime">
+				<view class="">
+					<text>{{ item.createtime }}</text>
+				</view>
+				<view class="action">
+					<image
+						class="icon"
+						@click="handle_thumb(index)"
+						style="margin-right: 15rpx;"
+						:src="item.thumbs.length ? '/static/thumbsd.svg' : '/static/thumbs.svg'"
+						mode="scaleToFill"
+					></image>
+					<image class="icon" src="/static/comment.svg" mode="scaleToFill"></image>
+				</view>
+			</view>
+			<view class="thumbs" v-show="item.thumbs.length">
+				<image style="margin-right: 10rpx;" :src="'/static/thumbsd.svg'" mode="scaleToFill"></image>
+				<text v-for="(thumb, ti) in item.thumbs" :key="ti">{{ thumb.nice }}</text>
+				觉得很赞
+			</view>
+			<view class="comment" v-show="item.comment.length">
+				<view v-for="(comment, ci) in item.comment" :key="ci">
+					<text>{{ comment.nick }}:</text>
+					<text>{{ comment.contant }}</text>
+				</view>
+			</view>
+		</view>
+	</view>
 </template>
 
 <script>
 import moment from 'moment';
+const list = [
+	{
+		id: 1,
+		contant: '荒木经惟 东京日和',
+		createtime: '2020-07-12 13:14',
+		thumbs: [
+			{
+				nice: 'xxx'
+			}
+		],
+		comment: [
+			{
+				nick: '何伯',
+				contant: '赞'
+			}
+		]
+	},
+	{
+		id: 2,
+		contant: '开开心心',
+		createtime: '2020-07-12 13:14',
+		thumbs: [],
+		comment: [
+			{
+				nick: '何伯',
+				contant: '赞'
+			}
+		]
+	},
+	{
+		id: 3,
+		contant: '快快乐乐',
+		createtime: '2020-07-12 13:14',
+		thumbs: [],
+		comment: [
+			{
+				nick: '何伯',
+				contant: '赞'
+			}
+		]
+	}
+];
 export default {
 	data() {
-		return {};
+		return {
+			list
+		};
 	},
-	onLoad() {
-		uni.navigateTo({
-			url: '/pages/auth/login/login'
-		});
-	},
-	methods: {}
+	onLoad() {},
+	methods: {
+		handle_thumb(i) {
+			const t = this.list[i].thumbs.length;
+			if (t) {
+				this.list[i].thumbs = [];
+			} else {
+				this.list[i].thumbs = [
+					{
+						nice: 'xxx'
+					}
+				];
+			}
+		}
+	}
 };
 </script>
 
-<style>
-.bg-class {
-	position: fixed;
-	z-index: -1;
-	height: 100vh;
-	width: 100vw;
-	left: 0;
-	top: 0;
-	mask: linear-gradient(45deg, #000 1%, transparent 6%, transparent 6%);
+<style lang="scss" scoped>
+page {
+	background-color: rgb(248, 248, 248);
+	.wapper {
+		.card {
+			border-radius: 20rpx;
+			background-color: #fff;
+			box-shadow: 0rpx 3rpx 3rpx -2rpx rgba(0, 0, 0, 0.2), 0rpx 3rpx 4rpx 0rpx rgba(0, 0, 0, 0.14), 0rpx 1rpx 8rpx 0rpx rgba(0, 0, 0, 0.12);
+			padding: 30rpx 40rpx;
+			margin: 20rpx 30rpx;
+			font-size: 32rpx;
+			color: #333;
+			.createtime {
+				margin-top: 50rpx;
+				font-size: 24rpx;
+				color: #999;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+			}
+			.thumbs {
+				display: flex;
+				justify-content: flex-start;
+				align-items: center;
+				font-size: 24rpx;
+				color: #666;
+				margin-top: 5rpx;
+				image {
+					height: 40rpx;
+					width: 40rpx;
+				}
+			}
+
+			.comment {
+				font-size: 24rpx;
+				margin-top: 10rpx;
+			}
+		}
+	}
 }
-.content {
-	display: grid;
-	place-items: center;
-	font-size: 32rpx;
-	padding: 5vw;
-	color: #333;
-	/* background-image: url('https://vkceyugu.cdn.bspapp.com/VKCEYUGU-crypto2server/2cd35670-f9c6-11ea-8ff1-d5dcf8779628.JPG'); */
-}
-.textfild {
-	height: 80rpx;
-	width: 100%;
-	border: 1rpx solid #eee;
-	display: flex;
-	align-items: center;
-	font-size: 24rpx;
-	padding: 0 16rpx;
-	margin-bottom: 20rpx;
-}
-.setion {
-	filter: blur();
+.icon {
+	height: 45rpx;
+	width: 45rpx;
 }
 </style>
