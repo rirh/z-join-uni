@@ -12,7 +12,7 @@
 			<view class=""><button :loading="loading" @click="handle_sumbit" class="sumbit">登&nbsp;&nbsp;&nbsp;录</button></view>
 			<!-- #ifdef MP-WEIXIN -->
 			<button open-type="getUserInfo" class="auth" @getuserinfo="handle_login_wechat"><image class="wechat" src="/static/wechat.svg" mode="scaleToFill"></image></button>
-			<!-- #endif -->
+			<!-- #endif -->			
 			<view class="protocol">
 				<image @click.stop="handle_toggle_agreen" class="" mode="scaleToFill" :src="`${agreen ? '/static/radio-seleted.svg' : '/static/radio.svg'}`"></image>
 				<text @click.stop="handle_toggle_agreen">请认证阅读并同意</text>
@@ -358,14 +358,8 @@ page {
 				width: 80rpx;
 			}
 		}
-		.auth.hover {
+		.auth:hover {
 			background-color: #f6f6f6!important;
-		}
-		.auth.active {
-			background-color: #f6f6f6!important;;
-		}
-		.auth.focus {
-			background-color: #f6f6f6!important;;
 		}
 		.auth.button-hover {
 			transform: translate(0rpx, 0rpx);

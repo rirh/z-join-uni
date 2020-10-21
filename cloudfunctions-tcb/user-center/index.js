@@ -14,7 +14,7 @@ exports.main = async (event) => {
 	uniCloud.logger.log(JSON.stringify(event))
 	let noCheckAction = ['register', 'checkToken', 'encryptPwd', 'login', 'loginByWeixin', 'sendSmsCode',
 		'setVerifyCode', 'loginBySms', 'loginByEmail', 'sendEmailCode', 'verifyEmailCode', 'verifyMobileCode',
-		'auth'
+		'auth', 'getUserInfo'
 	]
 	let action = event.action || params.action;
 	if (noCheckAction.indexOf(action) === -1) {
@@ -33,6 +33,17 @@ exports.main = async (event) => {
 	let res = {}
 
 	switch (action) {
+		case 'getUserInfo':
+			payload = await uniID.checkToken(event.uniIdToken)
+			if (payload.code && payload.code > 0) {
+				return payload
+			}
+			res = await uniID.getUserInfo({
+				uid: payload.uid,
+				field: ['mobile']
+			})
+			return res
+			break;
 		case 'auth':
 			const login_code = 888888;
 			await uniID.setVerifyCode({

@@ -1,0 +1,8 @@
+POST https://restapi.getui.com/v2/Ceh2wQqPp7AXGjvrKd2fP6/auth HTTP/1.1
+Content-Type: application/json
+
+{
+    "appkey": "rGuLC1azyMAn37XJ3KbVu4",
+	"sign": "GSOw5DGi4EYmzhbnqJxYm1WI51FS+l4e0A2AqHwKFMI=",
+	"timestamp": 1603260178892
+}
