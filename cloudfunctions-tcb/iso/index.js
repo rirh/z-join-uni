@@ -5,8 +5,8 @@ exports.main = async (event, context) => {
 	console.log('event : ' + event)
 	//返回数据给客户端
 	return {
+		code: 0,
 		iso: moment(),
 		epoch: Date.now()
 	}
 };
-

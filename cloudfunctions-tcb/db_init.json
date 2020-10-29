@@ -1,0 +1,98 @@
+{
+	"books": { // 集合（表名）
+		"title": [ // 数据
+			{
+				"IndexName": "title", // 索引名称
+				"MgoKeySchema": { // 索引规则
+					"MgoIndexKeys": [{
+						"Name": "title", // 索引字段
+						"Direction": "1" // 索引方向，1：ASC-升序，-1：DESC-降序，2dsphere：地理位置
+					}],
+					"MgoIsUnique": false // 索引是否唯一
+				}
+			}
+		],
+		"author": [ // 数据
+			{
+				"IndexName": "author", // 索引名称
+				"MgoKeySchema": { // 索引规则
+					"MgoIndexKeys": [{
+						"Name": "author", // 索引字段
+						"Direction": "1" // 索引方向，1：ASC-升序，-1：DESC-降序，2dsphere：地理位置
+					}],
+					"MgoIsUnique": false // 索引是否唯一
+				}
+			}
+
+		],
+		"catagory": [ // 数据
+			{
+				"IndexName": "catagory", // 索引名称
+				"MgoKeySchema": { // 索引规则
+					"MgoIndexKeys": [{
+						"Name": "catagory", // 索引字段
+						"Direction": "1" // 索引方向，1：ASC-升序，-1：DESC-降序，2dsphere：地理位置
+					}],
+					"MgoIsUnique": false // 索引是否唯一
+				}
+			}
+
+		],
+		"desc": [ // 数据
+
+			{
+				"IndexName": "desc", // 索引名称
+				"MgoKeySchema": { // 索引规则
+					"MgoIndexKeys": [{
+						"Name": "desc", // 索引字段
+						"Direction": "1" // 索引方向，1：ASC-升序，-1：DESC-降序，2dsphere：地理位置
+					}],
+					"MgoIsUnique": false // 索引是否唯一
+				}
+
+			}
+		],
+
+		"createtime": [ // 数据
+			{
+				"IndexName": "createtime", // 索引名称
+				"MgoKeySchema": { // 索引规则
+					"MgoIndexKeys": [{
+						"Name": "createtime", // 索引字段
+						"Direction": "1" // 索引方向，1：ASC-升序，-1：DESC-降序，2dsphere：地理位置
+					}],
+					"MgoIsUnique": false // 索引是否唯一
+				}
+			}
+		],
+		"updatetime": [ // 数据
+			{
+				"IndexName": "createtime", // 索引名称
+				"MgoKeySchema": { // 索引规则
+					"MgoIndexKeys": [{
+						"Name": "createtime", // 索引字段
+						"Direction": "1" // 索引方向，1：ASC-升序，-1：DESC-降序，2dsphere：地理位置
+					}],
+					"MgoIsUnique": false // 索引是否唯一
+				}
+			}
+		],
+		"thumbs": [ // 数据
+
+
+		],
+		"comment": [ // 数据
+
+		],
+		"index": [{ // 索引
+			"IndexName": "index", // 索引名称
+			"MgoKeySchema": { // 索引规则
+				"MgoIndexKeys": [{
+					"Name": "index", // 索引字段
+					"Direction": "1" // 索引方向，1：ASC-升序，-1：DESC-降序，2dsphere：地理位置
+				}],
+				"MgoIsUnique": false // 索引是否唯一
+			}
+		}]
+	}
+}

@@ -3,13 +3,16 @@
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationStyle": "custom"
+				// "navigationStyle": "custom",
+				"navigationBarBackgroundColor": "#eee",
+				"backgroundColor": "#eee",
+				"navigationBarTitleText": "写信"
+
 			}
 		}, {
 			"path": "pages/auth/login/login",
 			"style": {
-				"navigationStyle": "custom",
-				"backgroundColor": "#f6f6f6"
+				"navigationStyle": "custom"
 			}
 		}, {
 			"path": "pages/auth/privacy/privacy",
@@ -24,12 +27,14 @@
 		}, {
 			"path": "pages/discover/discover",
 			"style": {
-				"navigationBarTitleText": "发现"
+				"navigationBarTitleText": "发现",
+				"navigationBarBackgroundColor": "#eee",
+				"backgroundColor": "#f6f6f6"
 			}
 		}, {
 			"path": "pages/me/me",
 			"style": {
-				"navigationBarTitleText": "我的"
+				"navigationBarTitleText": "我"
 			}
 		}, {
 			"path": "pages/words-like-meet/words-like-meet",
@@ -40,7 +45,16 @@
 			}
 
 		}
-	],
+	    ,{
+            "path" : "pages/auth/edit-user-info/edit-user-info",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "个人中心",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ],
 	"tabBar": {
 		"color": "#6E6F74",
 		"selectedColor": "#000",

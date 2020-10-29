@@ -6,3 +6,46 @@ Content-Type: application/json
 	"sign": "GSOw5DGi4EYmzhbnqJxYm1WI51FS+l4e0A2AqHwKFMI=",
 	"timestamp": 1603260178892
 }
+###
+POST https://restapi.getui.com/v2/Ceh2wQqPp7AXGjvrKd2fP6/push/single/cid HTTP/1.1
+Content-Type: application/json
+Cache-Control: no-Cache
+Authorization: 'a0cd659c69d0c1d3c9b2557bfd798132d9cbc59c13e994bb46a2e72d17777a21'
+token: 'a0cd659c69d0c1d3c9b2557bfd798132d9cbc59c13e994bb46a2e72d17777a21'
+
+{
+        "request_id":"uni1603336015044push",
+        "audience":{
+            "cid":[
+                "0931cfc7f5f5b37b2821fe2cd5f40bb9"
+            ]
+        },
+        "push_message":{
+            "transmission":"{'data':'【单推】数据'}"
+        },
+        "push_channel":{
+            "android":{
+                "ups":{
+                    "notification":{
+                        "title":"test",
+                        "body":"test",
+                        "channel_level":3,
+                        "click_type":"intent"
+                    }
+                }
+            },
+            "ios":{
+                "type":"notify",
+                "payload":"{'data':'【单推】数据'}",
+                "aps":{
+                    "alert":{
+                        "title":"请填写ios标题",
+                        "body":"请填写ios内容"
+                    },
+                    "content-available":0,
+                    "sound":"pushsound.caf"
+                },
+                "auto_badge":"+1"
+            }
+        }
+    }

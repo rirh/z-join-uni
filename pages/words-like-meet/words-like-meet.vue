@@ -40,14 +40,18 @@
 				uniCloud.callFunction({
 					name: 'letter',
 					data: {
-						type: 'letterContext'
+						type: 'meetYou'
 					},
 					success: ({
 						result: {
 							data
 						}
 					}) => {
-						this.letter = data
+						// console.log(desc);
+						const [{
+							desc
+						}] = data;
+						this.letter = desc
 					}
 				})
 			},

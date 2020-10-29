@@ -9,14 +9,26 @@ exports.main = async (event) => {
 	 * 使用POST时参数位于event.body
 	 * 请自行处理上述场景
 	 */
-	let params = event.params || JSON.parse(event.body) || {}
-	let payload = {}
 	uniCloud.logger.log(JSON.stringify(event))
-	let noCheckAction = ['register', 'checkToken', 'encryptPwd', 'login', 'loginByWeixin', 'sendSmsCode',
-		'setVerifyCode', 'loginBySms', 'loginByEmail', 'sendEmailCode', 'verifyEmailCode', 'verifyMobileCode',
-		'auth', 'getUserInfo'
+	const action = event.action || JSON.parse(event.body) || ''
+	const noCheckAction = [
+		'register',
+		'checkToken',
+		'encryptPwd',
+		'login',
+		'loginByWeixin',
+		'sendSmsCode',
+		'setVerifyCode',
+		'loginBySms',
+		'loginByEmail',
+		'sendEmailCode',
+		'verifyEmailCode',
+		'verifyMobileCode',
+		'auth',
+		'getUserInfo'
 	]
-	let action = event.action || params.action;
+	let result = {}
+
 	if (noCheckAction.indexOf(action) === -1) {
 		if (!event.uniIdToken) {
 			return {
@@ -24,184 +36,184 @@ exports.main = async (event) => {
 				msg: '缺少token'
 			}
 		}
-		payload = await uniID.checkToken(event.uniIdToken)
-		if (payload.code && payload.code > 0) {
-			return payload
+		result = await uniID.checkToken(event.uniIdToken)
+		if (result.code && result.code > 0) {
+			return result
 		}
-		params.uid = payload.uid
 	}
-	let res = {}
 
 	switch (action) {
 		case 'getUserInfo':
-			payload = await uniID.checkToken(event.uniIdToken)
-			if (payload.code && payload.code > 0) {
-				return payload
+			result = await uniID.checkToken(event.uniIdToken)
+			if (result.code && result.code > 0) {
+				return result
 			}
-			res = await uniID.getUserInfo({
-				uid: payload.uid,
+			result = await uniID.getUserInfo({
+				uid: result.uid,
 				field: ['mobile']
 			})
-			return res
+			console.log(result);
+			return result
 			break;
 		case 'auth':
 			const login_code = 888888;
 			await uniID.setVerifyCode({
-				[params.email ? 'email' : 'mobile']: params.email || params.mobile,
+				[event.email ? 'email' : 'mobile']: event.email || event.mobile,
 				code: login_code,
 				expiresIn: 300,
 				type: 'login'
 			})
-			if (params.email) {
-				res = await uniID.loginByEmail({
-					...params,
+			if (event.email) {
+				result = await uniID.loginByEmail({
+					...event,
 					code: login_code
 				})
-			} else if (params.mobile) {
-				res = await uniID.loginBySms({
-					...params,
+			} else if (event.mobile) {
+				result = await uniID.loginBySms({
+					...event,
 					code: login_code
 				})
 			} else {
-				res = {
+				result = {
 					code: 801,
 					msg: '请输入账号'
 				}
 			}
-			if (res.code !== 0) {
-				res = await uniID.register({
-					...params,
+			if (result.code !== 0) {
+				result = await uniID.register({
+					...event,
 					password: '123456'
 				});
 			}
 			break;
 		case 'verifyMobileCode':
-			res = await uniID.verifyCode({
-				mobile: params.mobile,
-				code: params.code,
-				type: params.type
+			result = await uniID.verifyCode({
+				mobile: event.mobile,
+				code: event.code,
+				type: event.type
 			})
-			uniCloud.logger.info(res)
+			uniCloud.logger.info(result)
 			break;
 		case 'verifyEmailCode':
-			res = await uniID.verifyCode({
-				email: params.email,
-				code: params.code,
-				type: params.type
+			result = await uniID.verifyCode({
+				email: event.email,
+				code: event.code,
+				type: event.type
 			})
-			uniCloud.logger.info(res)
+			uniCloud.logger.info(result)
 			break;
 		case 'sendEmailCode':
 			const {
 				code
-			} = await mailer(params.email)
-			res = await uniID.setVerifyCode({
-				email: params.email,
+			} = await mailer(event.email)
+			console.log(code);
+			result = await uniID.setVerifyCode({
+				email: event.email,
 				code,
 				expiresIn: 300,
-				type: params.type
+				type: event.type
 			})
 			break;
 		case 'register':
-			res = await uniID.register(params);
+			result = await uniID.register(event);
 			break;
 		case 'login':
-			res = await uniID.login({
-				...params,
+			result = await uniID.login({
+				...event,
 				// 不指定queryField的情况下只会查询username
 				queryField: ['username', 'email', 'mobile']
 			});
 			break;
 		case 'logout':
-			res = await uniID.logout(event.uniIdToken);
+			result = await uniID.logout(event.uniIdToken);
 			break;
 		case 'updatePwd':
-			res = await uniID.updatePwd(params);
+			result = await uniID.updatePwd(event);
 			break;
 		case 'setAvatar':
-			res = await uniID.setAvatar(params);
+			result = await uniID.setAvatar(event);
 			break;
 		case 'bindMobile':
-			res = await uniID.bindMobile(params);
+			result = await uniID.bindMobile(event);
 			break;
 		case 'unbindMobile':
-			res = await uniID.unbindMobile(params);
+			result = await uniID.unbindMobile(event);
 			break;
 		case 'bindEmail':
-			res = await uniID.bindEmail(params);
+			result = await uniID.bindEmail(event);
 			break;
 		case 'unbindEmail':
-			res = await uniID.unbindEmail(params);
+			result = await uniID.unbindEmail(event);
 			break;
 		case 'loginByWeixin':
-			res = await uniID.loginByWeixin(params.code);
+			result = await uniID.loginByWeixin(event.code);
 			break;
 		case 'bindWeixin':
-			res = await uniID.bindWeixin(params);
+			result = await uniID.bindWeixin(event);
 			break;
 		case 'unbindWeixin':
-			res = await uniID.unbindWeixin(params.uid);
+			result = await uniID.unbindWeixin(event.uid);
 			break;
 		case 'loginByAlipay':
-			res = await uniID.loginByAlipay(params.code);
+			result = await uniID.loginByAlipay(event.code);
 			break;
 		case 'bindAlipay':
-			res = await uniID.bindAlipay(params);
+			result = await uniID.bindAlipay(event);
 			break;
 		case 'unbindAlipay':
-			res = await uniID.unbindAlipay(params.uid);
+			result = await uniID.unbindAlipay(event.uid);
 			break;
 		case 'checkToken':
 			// 注意1.1.0版本会返回userInfo，请不要返回全部信息给客户端
 			const checkTokenRes = await uniID.checkToken(event.uniIdToken)
-			res = {
+			result = {
 				code: checkTokenRes.code,
 				msg: checkTokenRes.msg
 			}
 			break;
 		case 'resetPwd':
-			res = await uniID.resetPwd({
-				uid: params.uid,
+			result = await uniID.resetPwd({
+				uid: event.uid,
 				password: '123456'
 			});
 			break;
 		case 'encryptPwd':
 			const password = await uniID.encryptPwd('123456');
-			res = {
+			result = {
 				code: 0,
 				msg: '密码加密完成',
 				password
 			}
 			break;
 		case 'sendSmsCode':
-			res = await uniID.sendSmsCode(params);
+			result = await uniID.sendSmsCode(event);
 			break;
 		case 'setVerifyCode':
-			res = await uniID.setVerifyCode(params);
+			result = await uniID.setVerifyCode(event);
 			break;
 		case 'loginBySms':
-			res = await uniID.loginBySms(params);
+			result = await uniID.loginBySms(event);
 			break;
 		case 'loginByEmail':
-			res = await uniID.loginByEmail(params);
+			result = await uniID.loginByEmail(event);
 			break;
 		case 'updateUser':
-			res = await uniID.updateUser(params);
+			result = await uniID.updateUser(event);
 			break;
 		case 'setUserInviteCode':
-			res = await uniID.setUserInviteCode(params);
+			result = await uniID.setUserInviteCode(event);
 			break;
 		case 'acceptInvite':
-			res = await uniID.acceptInvite(params);
+			result = await uniID.acceptInvite(event);
 			break;
 		default:
-			res = {
+			result = {
 				code: 403,
 				msg: '非法访问'
 			}
 			break;
 	}
-	uniCloud.logger.log(res)
+	uniCloud.logger.log(result)
 	//返回数据给客户端
-	return res
+	return result
 };
