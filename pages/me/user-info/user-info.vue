@@ -59,7 +59,6 @@
 										const [{
 											tempFileURL
 										}] = fileList
-										console.log(tempFileURL);
 										uni.hideLoading()
 										this.$http({
 											name: 'user-center',

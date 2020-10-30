@@ -120,12 +120,12 @@
 		flex: 1;
 
 		.user {
-			font-size: 20rpx;
+			font-size: 32rpx;
 			// text-transform: capitalize;
 		}
 
 		.id {
-			font-size: 16rpx;
+			font-size: 24rpx;
 			color: #666;
 		}
 	}

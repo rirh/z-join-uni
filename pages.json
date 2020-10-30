@@ -3,10 +3,10 @@
 		{
 			"path": "pages/index/index",
 			"style": {
-				// "navigationStyle": "custom",
-				"navigationBarBackgroundColor": "#eee",
-				"backgroundColor": "#eee",
-				"navigationBarTitleText": "写信"
+				"navigationStyle": "custom"
+				// "navigationBarBackgroundColor": "#eee",
+				// "backgroundColor": "#eee",
+				// "navigationBarTitleText": "写信"
 
 			}
 		}, {
@@ -39,30 +39,36 @@
 		}, {
 			"path": "pages/words-like-meet/words-like-meet",
 			"style": {
-				"navigationBarTitleText": "与你见字如见面",
+				"navigationBarTitleText": "见字如见你",
 				"enablePullDownRefresh": false,
 				"navigationBarBackgroundColor": "#eee"
 			}
 
-		}
-		, {
+		}, {
 			"path": "pages/me/user-info/user-info",
 			"style": {
 				"navigationBarTitleText": "我的资料",
 				"enablePullDownRefresh": false
 			}
 
+		}, {
+			"path": "pages/me/profile-photo/profile-photo",
+			"style": {
+				"navigationBarTitleText": "头像",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/index/record/record",
+			"style": {
+				"navigationBarTitleText": "见字如见你",
+				"enablePullDownRefresh": false,
+				"navigationBarBackgroundColor": "#eee",
+				"backgroundColor": "#eee"
+			}
+
 		}
-	    ,{
-            "path" : "pages/me/profile-photo/profile-photo",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "头像",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-    ],
+	],
 	"tabBar": {
 		"color": "#6E6F74",
 		"selectedColor": "#000",
@@ -93,6 +99,6 @@
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "Z Join",
 		"navigationBarBackgroundColor": "#F8F8F8",
-		"backgroundColor": "#F8F8F8"
+		"backgroundColor": "#eee"
 	}
 }

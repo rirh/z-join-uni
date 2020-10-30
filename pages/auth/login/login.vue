@@ -196,6 +196,8 @@
 							});
 						}
 
+					}).catch(() => {
+						this.loading = false;
 					})
 				} else {
 					this.loading = false;
