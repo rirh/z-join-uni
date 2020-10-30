@@ -2,7 +2,7 @@
 	"passwordSecret": "zjoin",
 	"tokenSecret": "zjoin",
 	"tokenExpiresIn": 7200,
-	"passwordErrorLimit": 6,
+	"passwordErrorLimit": 10,
 	"bindTokenToDevice": true,
 	"passwordErrorRetryTime": 3600,
 	"autoSetInviteCode": false,

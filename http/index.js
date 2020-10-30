@@ -21,6 +21,7 @@ export default (params) => {
 						break;
 					case 30204:
 					case 30203:
+					case 30202:
 						store.dispatch('logout')
 					default:
 						showToast(result.message)
@@ -36,8 +37,9 @@ export default (params) => {
 				console.log(err)
 				reject(err)
 				console.timeEnd()
-				console.log(`============ ${params.name} end ===============`)
+				console.log(`============ error ${params.name} end ===============`)
 				console.groupEnd()
+				showToast(err.message)
 			})
 	})
 }

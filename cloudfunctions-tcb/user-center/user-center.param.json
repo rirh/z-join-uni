@@ -1,11 +1,7 @@
 // 本文件中的json内容将在云函数【运行】时作为参数传给云函数。
 // 配置教程参考：https://uniapp.dcloud.net.cn/uniCloud/quickstart?id=runparam
 {
-	"action": "getUserInfo",
-	"params": {
-		"email": "huibikuile@qq.com",
-		"type": "getUserInfo",
-		"code":921535
-	},
-	"uniIdToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoie1wiZW52TmFtZVwiOlwiY3J5cHRvMnNlcnZlci01NzYxNjRcIixcImxvZ2luVHlwZVwiOlwiQU5PTllNT1VTXCIsXCJ1dWlkXCI6XCIzZWRjMmZlOWQ3MTg0ZjVmYmY4YzBlZThjZWQ3NDg0YVwifSIsImlhdCI6MTYwMzM1NzA1OCwiZXhwIjoxNjAzMzYwNjU4fQ.jjX-tBAJjzk9LLiWqfP6o70a-7K7brkdwQn3U6Vc-a8;1603355875"
+	"action": "setAvatar",
+	"avatar":"https://6372-crypto2server-576164-1302901174.tcb.qcloud.la/111.png",
+	"uniIdToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiIxYjY0ZGQ3YjVmNjc2ZGVjMDAyYThlMzAwYjEzM2IyNiIsImlhdCI6MTYwMzk2MDQ1NywiZXhwIjoxNjAzOTY3NjU3fQ.QmZve03DDzKI6BLnD5scpSINFiUotcv6xvGgUfAaKA8"
 }

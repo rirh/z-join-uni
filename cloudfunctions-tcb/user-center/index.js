@@ -12,6 +12,7 @@ exports.main = async (event) => {
 	uniCloud.logger.log(JSON.stringify(event))
 	const action = event.action || JSON.parse(event.body) || ''
 	const noCheckAction = [
+		'setAvatar',
 		'register',
 		'checkToken',
 		'encryptPwd',
@@ -25,7 +26,8 @@ exports.main = async (event) => {
 		'verifyEmailCode',
 		'verifyMobileCode',
 		'auth',
-		'getUserInfo'
+		'getUserInfo',
+		'logout'
 	]
 	let result = {}
 
@@ -43,6 +45,22 @@ exports.main = async (event) => {
 	}
 
 	switch (action) {
+		case 'updateUser':
+			result = await uniID.updateUser({
+				uid: result.uid,
+				...event,
+			})
+			break;
+		case 'setAvatar':
+			console.log(result);
+			result = await uniID.setAvatar({
+				uid: result.uid,
+				avatar: result.avatar
+			})
+			break;
+		case 'logout':
+			result = await uniID.logout(event.uniIdToken)
+			break;
 		case 'getUserInfo':
 			result = await uniID.checkToken(event.uniIdToken)
 			if (result.code && result.code > 0) {

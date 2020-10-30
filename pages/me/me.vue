@@ -1,66 +1,71 @@
 <template>
 	<view>
-		<view @click="handle_go_edit" class="setion" :style="{'padding':`${CustomBar}rpx 0`}">
-			<image class="head-img" src="/static/user.svg" mode="scaleToFill"></image>
+		<view @click="handle_go_edit" class="setion">
+			<image class="head-img" src="/static/headimg.svg" mode="scaleToFill"></image>
 			<view class="user-info">
 				<view class="">
-					{{user._id}}
+					<text class="user">{{ user.email || user.mobile }} </text>
 				</view>
 				<view class="">
-					id:{{user.email||user.mobile}}
+					<text class="id">id:{{ user._id }}</text>
 				</view>
 			</view>
+			<image class="allow-right" src="/static/right.svg" mode="scaleToFill"></image>
 		</view>
-		<view class="setion active" style="margin-top: 16rpx;">
-			<text class="label">设置</text>
+		<view class="setion active" style="margin-top: 16rpx">
+			<image class="label-icon" src="/static/setting.svg" mode="scaleToFill"></image>
+			<text class="label flex-sub">设置</text>
+			<image class="allow-right" src="/static/right.svg" mode="scaleToFill"></image>
 		</view>
 		<view class="setion active">
-			<text class="label">关于</text>
+			<image class="label-icon" src="/static/about.svg" mode="scaleToFill"></image>
+			<text class="label flex-sub">关于</text>
+			<image class="allow-right" src="/static/right.svg" mode="scaleToFill"></image>
 		</view>
-		<view @click="handle_logout" class="setion active" style="margin-top: 16rpx;">
+		<view @click="handle_logout" class="setion active" style="margin-top: 16rpx">
+			<image class="label-icon" src="/static/exit.svg" mode="scaleToFill"></image>
 			<text class="label">退出</text>
 		</view>
-
-		<!-- me
-		<navigator url="/pages/words-like-meet/words-like-meet">/pages/words-like-meet/words-like-meet</navigator>
-		<navigator url="/pages/auth/login/login">/pages/auth/login/login</navigator> -->
 	</view>
 </template>
 
 <script>
 	import {
 		mapGetters
-	} from 'vuex'
+	} from "vuex";
 	export default {
 		data() {
 			return {};
 		},
 		computed: {
-			...mapGetters(['user'])
+			...mapGetters(["user"]),
 		},
-		onLoad() {
-
-		},
+		onLoad() {},
 		onShow() {
-			console.log(this.user);
 			this.$http({
-				name: 'user-center',
+				name: "user-center",
 				data: {
-					action: 'getUserInfo',
+					action: "getUserInfo",
 				},
-			}).then((res) => {})
-
+			}).then((res) => {});
 		},
 		methods: {
 			handle_go_edit() {
 				uni.navigateTo({
-					url: '/pages/auth/edit-user-info/edit-user-info'
-				})
+					url: "/pages/me/user-info/user-info",
+				});
 			},
 			handle_logout() {
-				this.$store.dispatch('logout')
-			}
-		}
+				this.$http({
+					name: 'user-center',
+					data: {
+						action: 'logout',
+					}
+				}).then(() => {
+					this.$store.dispatch("logout");
+				})
+			},
+		},
 	};
 </script>
 
@@ -77,9 +82,14 @@
 		align-items: center;
 
 		.label {
-			margin-left: 40rpx;
 			font-weight: 400;
 			font-size: 32rpx;
+		}
+
+		.label-icon {
+			height: 45rpx;
+			width: 45rpx;
+			margin: 0 20rpx;
 		}
 	}
 
@@ -93,18 +103,35 @@
 		background-color: #fff;
 		border-radius: 10rpx;
 		margin-left: 40rpx;
+		margin: 20rpx;
+	}
 
+	.allow-right {
+		height: 55rpx;
+		width: 55rpx;
+		margin-right: 20rpx;
+		justify-self: flex-end;
 	}
 
 	.user-info {
 		margin-left: 20rpx;
 		font-size: 32rpx;
 		font-weight: 600;
-		text-transform: uppercase;
+		flex: 1;
+
+		.user {
+			font-size: 20rpx;
+			// text-transform: capitalize;
+		}
+
+		.id {
+			font-size: 16rpx;
+			color: #666;
+		}
 	}
 
 	.setion::after {
-		content: ' ';
+		content: " ";
 		width: 200%;
 		height: 200%;
 		position: absolute;

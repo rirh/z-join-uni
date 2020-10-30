@@ -45,11 +45,19 @@
 			}
 
 		}
+		, {
+			"path": "pages/me/user-info/user-info",
+			"style": {
+				"navigationBarTitleText": "我的资料",
+				"enablePullDownRefresh": false
+			}
+
+		}
 	    ,{
-            "path" : "pages/auth/edit-user-info/edit-user-info",
+            "path" : "pages/me/profile-photo/profile-photo",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "个人中心",
+                "navigationBarTitleText": "头像",
                 "enablePullDownRefresh": false
             }
             

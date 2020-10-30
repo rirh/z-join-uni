@@ -25,16 +25,18 @@ const auth = {
 			uni.setStorageSync('uniIdTokenExpired', tokenExpired);
 			uni.setStorageSync('userinfo', userInfo);
 			state.userinfo = userInfo;
+			state.isLogin = true;
 			uni.switchTab({
 				url: '/pages/index/index'
 			});
 		},
 		logout(state) {
-			state.userinfo = {};
 			uni.removeStorageSync('uniIdToken')
 			uni.removeStorageSync('uniIdTokenExpired')
 			uni.removeStorageSync('userinfo')
 			console.log('logout');
+			state.userinfo = {};
+			state.isLogin = false;
 			uni.navigateTo({
 				url: '/pages/auth/login/login'
 			})
