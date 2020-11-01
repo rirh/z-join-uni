@@ -68,7 +68,16 @@
 			}
 
 		}
-	],
+	    ,{
+            "path" : "pages/me/security/security",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "安全中心",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ],
 	"tabBar": {
 		"color": "#6E6F74",
 		"selectedColor": "#000",
@@ -98,7 +107,7 @@
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "Z Join",
-		"navigationBarBackgroundColor": "#F8F8F8",
+		"navigationBarBackgroundColor": "#eee",
 		"backgroundColor": "#eee"
 	}
 }
