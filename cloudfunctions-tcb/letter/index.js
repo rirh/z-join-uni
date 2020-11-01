@@ -29,6 +29,12 @@ exports.main = async (event, context) => {
 				data: letters
 			}
 			break;
+		case 'query':
+			result = {
+				code: 0,
+				data: letters
+			}
+			break;
 		default:
 			result = {
 				code: -1,

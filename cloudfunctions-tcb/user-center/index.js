@@ -39,6 +39,8 @@ exports.main = async (event) => {
 			}
 		}
 		result = await uniID.checkToken(event.uniIdToken)
+		console.log(JSON.stringify(result));
+
 		if (result.code && result.code > 0) {
 			return result
 		}
@@ -47,28 +49,22 @@ exports.main = async (event) => {
 	switch (action) {
 		case 'updateUser':
 			result = await uniID.updateUser({
-				uid: result.uid,
+				uid: event.uid,
 				...event,
 			})
 			break;
 		case 'setAvatar':
-			console.log(result);
 			result = await uniID.setAvatar({
-				uid: result.uid,
-				avatar: result.avatar
+				uid: event.uid,
+				avatar: event.avatar
 			})
 			break;
 		case 'logout':
-			result = await uniID.logout(event.uniIdToken)
+			result = await uniID.logout(event.token)
 			break;
 		case 'getUserInfo':
-			result = await uniID.checkToken(event.uniIdToken)
-			if (result.code && result.code > 0) {
-				return result
-			}
 			result = await uniID.getUserInfo({
-				uid: result.uid,
-				field: ['mobile']
+				uid: event.uid,
 			})
 			console.log(result);
 			return result
@@ -165,6 +161,11 @@ exports.main = async (event) => {
 			break;
 		case 'loginByWeixin':
 			result = await uniID.loginByWeixin(event.code);
+			await uniID.updateUser({
+				uid: result.uid,
+				avatar: event.detail.avatarUrl,
+				...event.detail
+			})
 			break;
 		case 'bindWeixin':
 			result = await uniID.bindWeixin(event);

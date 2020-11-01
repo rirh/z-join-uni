@@ -22,7 +22,7 @@ export default (params) => {
 					case 30204:
 					case 30203:
 					case 30202:
-						store.dispatch('logout')
+						store.dispatch('auth/logout')
 					default:
 						showToast(result.message)
 						break;

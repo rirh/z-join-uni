@@ -1,43 +1,44 @@
 {
-	"passwordSecret": "zjoin",
-	"tokenSecret": "zjoin",
+	"passwordSecret": "passwordSecret-demo",
+	"tokenSecret": "tokenSecret-demo",
 	"tokenExpiresIn": 7200,
-	"passwordErrorLimit": 10,
+	"tokenExpiresThreshold": 600,
+	"passwordErrorLimit": 6,
 	"bindTokenToDevice": true,
 	"passwordErrorRetryTime": 3600,
 	"autoSetInviteCode": false,
 	"forceInviteCode": false,
 	"app-plus": {
 		"tokenExpiresIn": 2592000,
-		"oauth": {
-			"weixin": {
-				"appid": "wx11961bc40991f04e",
-				"appsecret": "696902015d8daeca4f6a2e597493d954"
+		"oauth" : {
+			"weixin" : {
+				"appid" : "wx1868b4a99a297d05",
+				"appsecret" : "0b616b1d81bc53c3092794c888a68382"
 			}
 		}
 	},
 	"mp-weixin": {
-		"oauth": {
-			"weixin": {
-				"appid": "wx1868b4a99a297d05",
-				"appsecret": "696902015d8daeca4f6a2e597493d954"
+		"oauth" : {
+			"weixin" : {
+				"appid" : "wx1868b4a99a297d05",
+				"appsecret" : "0b616b1d81bc53c3092794c888a68382"
 			}
 		}
 	},
 	"mp-alipay": {
-		"oauth": {
-			"alipay": {
-				"appid": "alipay appid",
-				"privateKey": "alipay privateKey"
+		"oauth" : {
+			"alipay" : {
+				"appid" : "alipay appid",
+				"privateKey" : "alipay privateKey"
 			}
 		}
 	},
 	"service": {
 		"sms": {
-			"name": "注册模版",
+			"name": "DCloud",
 			"codeExpiresIn": 300,
-			"smsKey": "5d94035c55f67ae32cd1966798406b64",
-			"smsSecret": "0104d42565d44ac6798552405524d22a"
+			"smsKey": "your sms key",
+			"smsSecret": "your sms secret"
 		}
 	}
 }
