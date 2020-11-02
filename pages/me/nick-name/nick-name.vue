@@ -1,10 +1,8 @@
 <template>
 	<view class="wapper">
-		<view class="label" v-if="user.password">请输入旧密码</view>
-		<view class="value" v-if="user.password"><input v-model="oldPassword" type="text" placeholder="请输入旧密码" /></view>
-		<view class="label">请输入新密码</view>
-		<view class="value"><input v-model="newPassword" type="text" placeholder="请输入新密码" /></view>
-		<button class="sumbit" @click="handle_sumbit_password">确定{{user.password?'修改':'重置'}}</button>
+		<view class="label">请输入昵称</view>
+		<view class="value"><input v-model="nickName" type="text" placeholder="请输入昵称" /></view>
+		<button class="sumbit" @click="handle_sumbit">确定修改</button>
 	</view>
 </template>
 
@@ -15,8 +13,7 @@
 	export default {
 		data() {
 			return {
-				oldPassword: '',
-				newPassword: '',
+				nickName: '',
 			};
 		},
 		computed: {
@@ -24,18 +21,17 @@
 				user: 'auth/user'
 			})
 		},
+		onLoad() {
+			this.nickName = this.user.nickName;
+		},
 		methods: {
-			async handle_sumbit_password() {
-				uni.showLoading()
+			async handle_sumbit() {
 				const {
 					code
-				} = await this.$store.dispatch('auth/updatePwd', {
-					oldPassword: this.oldPassword,
-					newPassword: this.newPassword,
-					password_confirmation: this.newPassword
+				} = await this.$store.dispatch('auth/update', {
+					nickName: this.nickName,
 				})
 				if (!code) uni.navigateBack()
-
 			}
 		}
 	};

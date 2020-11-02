@@ -11,6 +11,7 @@ export default {
   },
   onShow: function () {
     console.log("App Show");
+	this.$store.dispatch('auth/getUserInfo');
     const store = uni.getStorageSync("store");
     if (store) {
       this.$store.replaceState(

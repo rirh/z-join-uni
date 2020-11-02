@@ -18,6 +18,9 @@ const auth = {
 		}
 	},
 	mutations: {
+		updatePwd() {
+
+		},
 		update(state, {
 			userInfo,
 		}) {
@@ -52,6 +55,22 @@ const auth = {
 		}
 	},
 	actions: {
+		async updatePwd(state, payload) {
+			const {
+				_id,
+				password
+			} = uni.getStorageSync('userinfo')
+			const result = await client({
+				name: 'user-center',
+				data: {
+					action: Boolean(password) ? 'updatePwd' : 'resetPwd',
+					uid: _id,
+					...payload
+				}
+			})
+			state.dispatch('getUserInfo')
+			return result;
+		},
 		async getUserInfo(state) {
 			const {
 				_id
@@ -68,18 +87,37 @@ const auth = {
 		login(state, params) {
 			state.commit('login', params)
 		},
-		logout(state) {
+		async update(state, params) {
+			const {
+				_id
+			} = uni.getStorageSync('userinfo')
 			const token = uni.getStorageSync('uniIdToken')
-			client({
-					name: 'user-center',
-					data: {
-						action: 'logout',
-						token
-					}
-				})
-				.then(res => {
-					state.commit('logout')
-				})
+			const {
+				code
+			} = await client({
+				name: 'user-center',
+				data: {
+					action: 'updateUser',
+					uid: _id,
+					token,
+					...params
+				}
+			})
+			if (!code) state.dispatch('getUserInfo')
+			return {
+				code
+			}
+		},
+		logout(state) {
+			state.commit('logout')
+			const token = uni.getStorageSync('uniIdToken')
+			uniCloud.callFunction({
+				name: 'user-center',
+				data: {
+					action: 'logout',
+					token
+				}
+			})
 		}
 	}
 }

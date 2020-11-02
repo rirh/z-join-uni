@@ -37,14 +37,6 @@
 				"navigationBarTitleText": "我"
 			}
 		}, {
-			"path": "pages/words-like-meet/words-like-meet",
-			"style": {
-				"navigationBarTitleText": "见字如见你",
-				"enablePullDownRefresh": false,
-				"navigationBarBackgroundColor": "#eee"
-			}
-
-		}, {
 			"path": "pages/me/user-info/user-info",
 			"style": {
 				"navigationBarTitleText": "我的资料",
@@ -55,7 +47,10 @@
 			"path": "pages/me/profile-photo/profile-photo",
 			"style": {
 				"navigationBarTitleText": "头像",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"navigationBarBackgroundColor": "#000",
+				"backgroundColor": "#000",
+				"navigationBarTextStyle":"white"
 			}
 
 		}, {
@@ -67,12 +62,19 @@
 				"backgroundColor": "#eee"
 			}
 
+		}, {
+			"path": "pages/me/security/security",
+			"style": {
+				"navigationBarTitleText": "安全中心",
+				"enablePullDownRefresh": false
+			}
+
 		}
 	    ,{
-            "path" : "pages/me/security/security",
+            "path" : "pages/me/nick-name/nick-name",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "安全中心",
+                "navigationBarTitleText": "修改昵称",
                 "enablePullDownRefresh": false
             }
             

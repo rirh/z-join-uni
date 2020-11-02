@@ -48,6 +48,7 @@ exports.main = async (event) => {
 
 	switch (action) {
 		case 'updateUser':
+			console.log('updateUser' + JSON.stringify(event));
 			result = await uniID.updateUser({
 				uid: event.uid,
 				...event,
@@ -66,7 +67,6 @@ exports.main = async (event) => {
 			result = await uniID.getUserInfo({
 				uid: event.uid,
 			})
-			console.log(result);
 			return result
 			break;
 		case 'auth':
@@ -161,6 +161,7 @@ exports.main = async (event) => {
 			break;
 		case 'loginByWeixin':
 			result = await uniID.loginByWeixin(event.code);
+			if(!result.userInfo.avatar)
 			await uniID.updateUser({
 				uid: result.uid,
 				avatar: event.detail.avatarUrl,

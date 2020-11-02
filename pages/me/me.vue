@@ -1,6 +1,6 @@
 <template>
 	<view class="wapper">
-		<skeleton :row="3" animate :loading="!user.nickName">
+		<skeleton :row="3" animate :loading="!user.last_login_date">
 			<navigator url="/pages/me/user-info/user-info">
 				<view class="setion">
 					<image class="head-img" :src="user.avatar || '/static/headimg.svg'" mode="scaleToFill"></image>
@@ -60,7 +60,6 @@ export default {
 	},
 	onLoad() {},
 	onShow() {
-		this.$store.dispatch('auth/getUserInfo');
 	},
 	methods: {
 		moment,

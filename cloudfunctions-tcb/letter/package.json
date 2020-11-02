@@ -1,0 +1,9 @@
+{
+	"name": "letter",
+	"version": "1.0.0",
+	"main": "index.js",
+	"license": "MIT",
+	"dependencies": {
+		"uni-id": "file:../common/uni-id"
+	}
+}

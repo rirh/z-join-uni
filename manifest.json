@@ -18,7 +18,8 @@
         },
         /* 模块配置 */
         "modules" : {
-            "Push" : {}
+            "Push" : {},
+            "SQLite" : {}
         },
         /* 应用发布信息 */
         "distribute" : {
@@ -51,7 +52,14 @@
                 "abiFilters" : [ "armeabi-v7a", "arm64-v8a", "x86" ]
             },
             /* ios打包配置 */
-            "ios" : {},
+            "ios" : {
+                "privacyDescription" : {
+                    "NSPhotoLibraryUsageDescription" : "我们需要使用您的相册，用来更换头像",
+                    "NSPhotoLibraryAddUsageDescription" : "我们需要使用您的相册，用来保存媒体文件",
+                    "NSCameraUsageDescription" : "我们需要使用您的相机，用来上传媒体文件",
+                    "NSMicrophoneUsageDescription" : "我们需要使用您的麦克风，用来保录制语音"
+                }
+            },
             /* SDK配置 */
             "sdkConfigs" : {
                 "ad" : {},

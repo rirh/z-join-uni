@@ -98,55 +98,55 @@
 </script>
 
 <style lang="scss" scoped>
-	page {
-		background-color: rgb(248, 248, 248);
+	page,
+	.wapper {
+		height: 100vh;
+		background-color: #eee;
+		/* #ifndef APP-PLUS */
+		// padding-top: 30rpx;
+		// padding-top: var(--status-bar-height);
 
-		.wapper {
-			/* #ifndef APP-PLUS */
-			// padding-top: 30rpx;
-			// padding-top: var(--status-bar-height);
+		/* #endif */
+		// padding-top:30rpx ;
+		.card {
+			border-radius: 20rpx;
+			background-color: #fff;
+			box-shadow: 0rpx 3rpx 3rpx -2rpx rgba(0, 0, 0, 0.2), 0rpx 3rpx 4rpx 0rpx rgba(0, 0, 0, 0.14), 0rpx 1rpx 8rpx 0rpx rgba(0, 0, 0, 0.12);
+			padding: 30rpx 40rpx;
+			margin: 20rpx 30rpx;
+			font-size: 32rpx;
+			color: #333;
 
-			/* #endif */
-			// padding-top:30rpx ;
-			.card {
-				border-radius: 20rpx;
-				background-color: #fff;
-				box-shadow: 0rpx 3rpx 3rpx -2rpx rgba(0, 0, 0, 0.2), 0rpx 3rpx 4rpx 0rpx rgba(0, 0, 0, 0.14), 0rpx 1rpx 8rpx 0rpx rgba(0, 0, 0, 0.12);
-				padding: 30rpx 40rpx;
-				margin: 20rpx 30rpx;
-				font-size: 32rpx;
-				color: #333;
+			.createtime {
+				margin-top: 50rpx;
+				font-size: 24rpx;
+				color: #999;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+			}
 
-				.createtime {
-					margin-top: 50rpx;
-					font-size: 24rpx;
-					color: #999;
-					display: flex;
-					justify-content: space-between;
-					align-items: center;
+			.thumbs {
+				display: flex;
+				justify-content: flex-start;
+				align-items: center;
+				font-size: 24rpx;
+				color: #666;
+				margin-top: 5rpx;
+
+				image {
+					height: 40rpx;
+					width: 40rpx;
 				}
+			}
 
-				.thumbs {
-					display: flex;
-					justify-content: flex-start;
-					align-items: center;
-					font-size: 24rpx;
-					color: #666;
-					margin-top: 5rpx;
-
-					image {
-						height: 40rpx;
-						width: 40rpx;
-					}
-				}
-
-				.comment {
-					font-size: 24rpx;
-					margin-top: 10rpx;
-				}
+			.comment {
+				font-size: 24rpx;
+				margin-top: 10rpx;
 			}
 		}
 	}
+
 
 	.icon {
 		height: 45rpx;

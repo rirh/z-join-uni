@@ -125,3 +125,6 @@ text {
 .solids-left::after {
 	border-left: 4rpx solid $njh-color-border;
 }
+.shadow{
+	box-shadow: 0rpx 3rpx 3rpx -2rpx rgba(0, 0, 0, 0.2), 0rpx 3rpx 4rpx 0rpx rgba(0, 0, 0, 0.14), 0rpx 1rpx 8rpx 0rpx rgba(0, 0, 0, 0.12);
+}

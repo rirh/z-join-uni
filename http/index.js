@@ -22,6 +22,7 @@ export default (params) => {
 					case 30204:
 					case 30203:
 					case 30202:
+					case 30201:
 						store.dispatch('auth/logout')
 					default:
 						showToast(result.message)
