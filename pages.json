@@ -50,7 +50,7 @@
 				"enablePullDownRefresh": false,
 				"navigationBarBackgroundColor": "#000",
 				"backgroundColor": "#000",
-				"navigationBarTextStyle":"white"
+				"navigationBarTextStyle": "white"
 			}
 
 		}, {
@@ -69,17 +69,29 @@
 				"enablePullDownRefresh": false
 			}
 
+		}, {
+			"path": "pages/me/nick-name/nick-name",
+			"style": {
+				"navigationBarTitleText": "修改昵称",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/me/signature/signature",
+			"style": {
+				"navigationBarTitleText": "个性签名",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/me/edit-signature/edit-signature",
+			"style": {
+				"navigationBarTitleText": "编辑个性签名",
+				"enablePullDownRefresh": false
+			}
+
 		}
-	    ,{
-            "path" : "pages/me/nick-name/nick-name",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "修改昵称",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-    ],
+	],
 	"tabBar": {
 		"color": "#6E6F74",
 		"selectedColor": "#000",

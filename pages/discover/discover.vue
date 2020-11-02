@@ -1,5 +1,5 @@
 <template>
-	<view class="wapper" :style="{'padding-top':CustomBar+'rpx'}">
+	<view class="wapper" >
 		<view class=" card" v-for="(item, index) in list" :key="index">
 			<view class="">
 				<text>{{ item.contant }}</text>
@@ -102,6 +102,7 @@
 	.wapper {
 		height: 100vh;
 		background-color: #eee;
+		overflow: hidden;
 		/* #ifndef APP-PLUS */
 		// padding-top: 30rpx;
 		// padding-top: var(--status-bar-height);
