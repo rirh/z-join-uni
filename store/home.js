@@ -21,6 +21,16 @@ const home = {
 		}
 	},
 	actions: {
+		async insterLetter(state, payload) {
+			const result = await client({
+				name: 'letter',
+				data: {
+					action: 'insert',
+					...payload
+				}
+			})
+			return result;
+		},
 		async fetchLetters(state, params) {
 			state.commit('updateLetters', {
 				data: [],
@@ -31,7 +41,7 @@ const home = {
 				code
 			} = await client(params);
 			if (!code) state.commit('updateLetters', {
-				data: Array(10).fill(data[0]),
+				data,
 				loading: false
 			})
 		}

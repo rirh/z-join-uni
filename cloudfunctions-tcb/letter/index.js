@@ -3,36 +3,57 @@ const db = uniCloud.database();
 const collection = db.collection('letters');
 const uniID = require('uni-id')
 
-function AddEmail() {
-
-}
-
-function QueryEmail() {
-
-}
-
-
 exports.main = async (event, context) => {
 	//event为客户端上传的参数
-	console.log('event : ', event)
-	const {
-		data: letters
-	} = await collection.where({
-		_id: "b8df3bd65f913c7401a336545c52d0b4"
-	}).get();
-	// const letter =
-	// 	`那一天我二十一岁，在我一生的黄金时代。我有好多奢望。我想爱，想吃，还想在一瞬间变成天上半明半暗的云。后来我才知道，生活就是个缓慢受锤的过程，人一天天老下去，奢望也一天天消失，最后变得像挨了锤的牛一样。可以我过二十一岁的生日时没有遇见这一点，我觉得自己会永远生猛下去，什么也锤不了我。`
+
+	uniCloud.logger.log('================event===============')
+	uniCloud.logger.log(JSON.stringify(event))
+	uniCloud.logger.log('================event end===========')
 	let result = {}
 	result = await uniID.checkToken(event.uniIdToken)
 	if (result.code) return result;
-	switch (event.type) {
-		case 'meetYou':
+	const action = event.type || event.action
+	switch (action) {
+		case "query":
+			const {
+				data
+			} = await collection.where({
+				uid: event.uid
+			}).get()
 			result = {
 				code: 0,
-				data: letters
+				data
 			}
 			break;
-		case 'query':
+		case 'insert':
+			delete event.action
+			const {
+				id
+			} = await collection.add({
+				...event
+			})
+			if (id) {
+				await uniID.updateUser({
+					uid: event.uid,
+					signature: event.desc,
+				})
+				result = {
+					code: 0,
+					message: '操作成功'
+				}
+			} else {
+				result = {
+					code: 500,
+					message: '操作失败'
+				}
+			}
+			break;
+		case 'meetYou':
+			const {
+				data: letters
+			} = await collection.where({
+				_id: "b8df3bd65f913c7401a336545c52d0b4"
+			}).get();
 			result = {
 				code: 0,
 				data: letters
@@ -46,6 +67,10 @@ exports.main = async (event, context) => {
 			}
 			break;
 	}
+	uniCloud.logger.log('================result===============')
+	uniCloud.logger.log(JSON.stringify(result))
+	uniCloud.logger.log('================result end===========')
+
 	//返回数据给客户端
 	return result
 };
