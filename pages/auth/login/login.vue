@@ -12,7 +12,9 @@
 			</view>
 			<view class=""><button :loading="loading" @click="handle_sumbit" class="sumbit">登&nbsp;&nbsp;&nbsp;录</button></view>
 			<!-- #ifdef MP-WEIXIN -->
-			<button open-type="getUserInfo" class="auth" @getuserinfo="handle_login_wechat"><image class="wechat" src="/static/wechat.svg" mode="scaleToFill"></image></button>
+			<button open-type="getUserInfo" class="auth" @getuserinfo="handle_login_wechat">
+				<image class="wechat" src="/static/wechat.svg" mode="scaleToFill"></image>
+			</button>
 			<!-- #endif -->
 			<view class="protocol">
 				<image @click.stop="handle_toggle_agreen" class="" mode="scaleToFill" :src="`${agreen ? '/static/radio-seleted.svg' : '/static/radio.svg'}`"></image>
@@ -29,359 +31,353 @@
 </template>
 
 <script>
-import moment from 'moment';
-export default {
-	data() {
-		return {
-			focus_cursor: 'user',
-			statusBarHeight: 0,
-			timer: {},
-			url: 'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-crypto2server/2b05e970-f9c6-11ea-9dfb-6da8e309e0d8.JPG',
-			msg: '发送验证码',
-			username: 'only_tigerhu@163.com',
-			code: '',
-			password: '',
-			loading: false,
-			agreen: true
-		};
-	},
-	onLoad() {
-		this.statusBarHeight = uni.getSystemInfoSync().statusBarHeight;
-		this.$nextTick(async () => {
-			const result = await this.$http({
-				name: 'iso'
-			});
-			this.timer = result;
-		});
-	},
-	methods: {
-		moment,
-		handle_toggle_agreen() {
-			this.agreen = !this.agreen;
+	import moment from 'moment';
+	export default {
+		data() {
+			return {
+				focus_cursor: 'user',
+				statusBarHeight: 0,
+				timer: {},
+				url: 'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-crypto2server/2b05e970-f9c6-11ea-9dfb-6da8e309e0d8.JPG',
+				msg: '发送验证码',
+				username: 'only_tigerhu@163.com',
+				code: '',
+				password: '',
+				loading: false,
+				agreen: true
+			};
 		},
-		handle_back() {
-			uni.navigateBack();
-		},
-		handle_login_wechat({ detail }) {
-			if (!this.agreen) {
-				uni.showToast({
-					icon: 'none',
-					position: 'bottom',
-					title: '请阅读并同意用户服务协议及隐私权政策'
+		onLoad() {
+			this.statusBarHeight = uni.getSystemInfoSync().statusBarHeight;
+			this.$nextTick(async () => {
+				const result = await this.$http({
+					name: 'iso'
 				});
-				return;
-			}
-			uni.showLoading();
-			uni.getProvider({
-				service: 'oauth',
-				success: res => {
-					if (~res.provider.indexOf('weixin')) {
-						console.log(detail);
-						uni.login({
-							provider: 'weixin',
-							success: res => {
-								console.log('----------------');
-								this.$http({
-									name: 'user-center',
-									data: {
-										action: 'loginByWeixin',
-										code: res.code,
-										detail: detail.userInfo
-									}
-								}).then(result => {
+				this.timer = result;
+			});
+		},
+		methods: {
+			moment,
+			handle_toggle_agreen() {
+				this.agreen = !this.agreen;
+			},
+			handle_back() {
+				uni.navigateBack();
+			},
+			handle_login_wechat({
+				detail
+			}) {
+				if (!this.agreen) {
+					this.$showToast('请阅读并同意用户服务协议及隐私权政策')
+					
+					return;
+				}
+				uni.showLoading();
+				uni.getProvider({
+					service: 'oauth',
+					success: res => {
+						if (~res.provider.indexOf('weixin')) {
+							console.log(detail);
+							uni.login({
+								provider: 'weixin',
+								success: res => {
+									console.log('----------------');
+									this.$http({
+										name: 'user-center',
+										data: {
+											action: 'loginByWeixin',
+											code: res.code,
+											detail: detail.userInfo
+										}
+									}).then(result => {
+										uni.hideLoading();
+										this.$store.dispatch('auth/login', result);
+									});
+								},
+								fail(err) {
+									uni.showModal({
+										content: err,
+										showCancel: false
+									});
 									uni.hideLoading();
-									this.$store.dispatch('auth/login', result);
-								});
-							},
-							fail(err) {
-								uni.showModal({
-									content: err,
-									showCancel: false
-								});
-								uni.hideLoading();
-								console.log('----------------');
-								console.log(err);
-								reject(new Error('微信登录失败'));
-							}
-						});
-					}
-				},
-				fail: () => {
-					uni.hideLoading();
-				}
-			});
-		},
-		async handle_sumbit() {
-			if (!this.agreen) {
-				uni.showToast({
-					icon: 'none',
-					position: 'bottom',
-					title: '请阅读并同意用户服务协议及隐私权政策'
-				});
-				return;
-			}
-			const isEmail = this.username.indexOf('@') > -1;
-			let params;
-			if (isEmail) {
-				params = {
-					action: 'verifyEmailCode',
-					email: this.username,
-					type: 'register',
-					code: this.code
-				};
-				if (!/.+@.+/.test(this.username)) {
-					uni.showModal({
-						content: '请输入正确的邮箱',
-						showCancel: false
-					});
-					return;
-				}
-			} else {
-				params = {
-					action: 'verifyMobileCode',
-					mobile: this.username,
-					type: 'register',
-					code: this.code
-				};
-				if (!/^1\d{10}$/.test(this.username)) {
-					uni.showModal({
-						content: '请输入正确的手机号',
-						showCancel: false
-					});
-					return;
-				}
-			}
-			if (!this.code) {
-				uni.showModal({
-					content: '请输入验证码',
-					showCancel: false
-				});
-				return;
-			}
-			this.loading = true;
-			const { code, msg } = await this.$http({
-				name: 'user-center',
-				data: params
-			});
-			if (!code) {
-				this.$http({
-					name: 'user-center',
-					data: {
-						action: 'auth',
-						[isEmail ? 'email' : 'mobile']: this.username,
-						code: this.code
-					}
-				})
-					.then(result => {
-						this.loading = false;
-						if (!result.code) {
-							this.$store.dispatch('auth/login', result);
-						} else {
-							uni.showToast({
-								icon: 'none',
-								title: result.msg,
-								position: 'bottom'
+									console.log('----------------');
+									console.log(err);
+									reject(new Error('微信登录失败'));
+								}
 							});
 						}
-					})
-					.catch(() => {
-						this.loading = false;
-					});
-			} else {
-				this.loading = false;
-				uni.showToast({
-					icon: 'none',
-					title: msg,
-					position: 'bottom'
+					},
+					fail: () => {
+						uni.hideLoading();
+					}
 				});
-			}
-		},
-		async handleSendCode() {
-			if (this.msg.endsWith('s')) return;
-			this.focus_cursor = 'code';
-			let params;
-
-			const isEmail = this.username.indexOf('@') > -1;
-			if (isEmail) {
-				params = {
-					action: 'sendEmailCode',
-					email: this.username,
-					type: 'register'
-				};
-				if (!/.+@.+/.test(this.username)) {
-					uni.showModal({
-						content: '请输入正确的邮箱',
-						showCancel: false
-					});
+			},
+			async handle_sumbit() {
+				if (!this.agreen) {
+					this.$showToast('请阅读并同意用户服务协议及隐私权政策')
+					
+			
 					return;
 				}
-			} else {
-				params = {
-					action: 'sendSmsCode',
-					mobile: this.username,
-					type: 'register'
-				};
-				if (!/^1\d{10}$/.test(this.username)) {
-					uni.showModal({
-						content: '请输入正确的手机号',
-						showCancel: false
-					});
-					return;
-				}
-			}
-			let timer;
-			const start_timer = () => {
-				timer = Number(this.msg.split('s')[0]);
-				timer = timer - 1;
-				this.msg = `${timer}s`;
-				if (timer > 0) {
-					setTimeout(() => {
-						start_timer();
-					}, 1000);
+				const isEmail = this.username.indexOf('@') > -1;
+				let params;
+				if (isEmail) {
+					params = {
+						action: 'verifyEmailCode',
+						email: this.username,
+						type: 'register',
+						code: this.code
+					};
+					if (!/.+@.+/.test(this.username)) {
+						uni.showModal({
+							content: '请输入正确的邮箱',
+							showCancel: false
+						});
+						return;
+					}
 				} else {
-					this.msg = `发送验证码`;
+					params = {
+						action: 'verifyMobileCode',
+						mobile: this.username,
+						type: 'register',
+						code: this.code
+					};
+					if (!/^1\d{10}$/.test(this.username)) {
+						uni.showModal({
+							content: '请输入正确的手机号',
+							showCancel: false
+						});
+						return;
+					}
 				}
-			};
-			uni.showLoading();
-			this.$http({
-				name: 'user-center',
-				data: params
-			}).then(() => {
-				uni.hideLoading();
-				uni.showToast({
-					icon: 'none',
-					title: '发送成功！',
-					position: 'bottom'
+				if (!this.code) {
+					uni.showModal({
+						content: '请输入验证码',
+						showCancel: false
+					});
+					return;
+				}
+				this.loading = true;
+				const {
+					code,
+					msg
+				} = await this.$http({
+					name: 'user-center',
+					data: params
 				});
-				this.msg = '60s';
-				this.code = '';
-				start_timer();
-			});
+				if (!code) {
+					this.$http({
+							name: 'user-center',
+							data: {
+								action: 'auth',
+								[isEmail ? 'email' : 'mobile']: this.username,
+								code: this.code
+							}
+						})
+						.then(result => {
+							this.loading = false;
+							if (!result.code) {
+								this.$store.dispatch('auth/login', result);
+							} else {
+								this.$showToast(result.msg)
+							}
+						})
+						.catch(() => {
+							this.loading = false;
+						});
+				} else {
+					this.loading = false;
+					this.$showToast(msg);
+				}
+			},
+			async handleSendCode() {
+				if (this.msg.endsWith('s')) return;
+				this.focus_cursor = 'code';
+				let params;
+
+				const isEmail = this.username.indexOf('@') > -1;
+				if (isEmail) {
+					params = {
+						action: 'sendEmailCode',
+						email: this.username,
+						type: 'register'
+					};
+					if (!/.+@.+/.test(this.username)) {
+						uni.showModal({
+							content: '请输入正确的邮箱',
+							showCancel: false
+						});
+						return;
+					}
+				} else {
+					params = {
+						action: 'sendSmsCode',
+						mobile: this.username,
+						type: 'register'
+					};
+					if (!/^1\d{10}$/.test(this.username)) {
+						uni.showModal({
+							content: '请输入正确的手机号',
+							showCancel: false
+						});
+						return;
+					}
+				}
+				let timer;
+				const start_timer = () => {
+					timer = Number(this.msg.split('s')[0]);
+					timer = timer - 1;
+					this.msg = `${timer}s`;
+					if (timer > 0) {
+						setTimeout(() => {
+							start_timer();
+						}, 1000);
+					} else {
+						this.msg = `发送验证码`;
+					}
+				};
+				uni.showLoading();
+				this.$http({
+					name: 'user-center',
+					data: params
+				}).then(() => {
+					uni.hideLoading();
+					uni.showToast({
+						icon: 'none',
+						title: '发送成功！',
+						position: 'bottom'
+					});
+					this.msg = '60s';
+					this.code = '';
+					start_timer();
+				});
+			}
 		}
-	}
-};
+	};
 </script>
 
 <style lang="scss">
-page {
-	background-color: #f6f6f6;
-	display: grid;
-	justify-content: center;
-	align-items: flex-start;
-	height: 100%;
+	page {
+		background-color: #eee;
+		display: grid;
+		justify-content: center;
+		align-items: flex-start;
+		height: 100%;
 
-	.login {
-		margin-top: 18vh;
-		min-height: 40vh;
-		width: 90vw;
-		z-index: 1;
+		.login {
+			margin-top: 18vh;
+			min-height: 40vh;
+			width: 90vw;
+			z-index: 1;
 
-		.tips {
-			font-family: cursive;
-			font-weight: bold;
-			letter-spacing: 8rpx;
-			font-size: 36rpx;
-		}
+			.tips {
+				font-family: cursive;
+				font-weight: bold;
+				letter-spacing: 8rpx;
+				font-size: 36rpx;
+			}
 
-		.textfield {
-			height: 100rpx;
-			background-color: #ffffff;
-			display: flex;
-			border-radius: 10rpx;
-			align-items: center;
-			font-size: 28rpx;
-			padding: 0 24rpx;
-			margin-bottom: 20rpx;
-		}
+			.textfield {
+				height: 100rpx;
+				background-color: #ffffff;
+				display: flex;
+				border-radius: 10rpx;
+				align-items: center;
+				font-size: 28rpx;
+				padding: 0 24rpx;
+				margin-bottom: 20rpx;
+			}
 
-		.sumbit {
-			height: 80rpx;
-			margin-top: 50rpx;
-			width: 100%;
-			background-color: #000;
-			color: #fff;
-		}
-
-		.auth {
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			// border: 1rpx solid #000;
-			// height: 90rpx;
-			// width: 90rpx;
-			// border-radius: 50%;
-			font-size: 60rpx;
-			margin: 0 auto;
-			margin-top: 60rpx;
-
-			.wechat {
+			.sumbit {
 				height: 80rpx;
-				width: 80rpx;
-				transform: translate(0rpx, 0rpx);
+				margin-top: 50rpx;
+				width: 100%;
+				background-color: #000;
+				color: #fff;
 			}
-			.wechat:active {
-				transform: translate(1rpx, 1rpx);
+
+			.auth {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				font-size: 60rpx;
+				margin: 0 auto;
+				margin-top: 60rpx;
+				background-color: #eee;
+				// width: 80rpx;
+
+				.wechat {
+					height: 80rpx;
+					width: 80rpx;
+					transform: translate(0rpx, 0rpx);
+				}
+
+				.wechat:active {
+					transform: translate(1rpx, 1rpx);
+				}
+			}
+
+			.auth:active {
+				background-color: #eee !important;
+			}
+
+
+
+			.protocol {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				font-size: 24rpx;
+				margin-top: 40rpx;
+				z-index: 2;
+
+				>image {
+					height: 40rpx;
+					width: 40rpx;
+					margin-right: 10rpx;
+				}
+
+				>navigator {
+					color: #666;
+				}
 			}
 		}
 
-		.auth:active {
+		.back {
+			position: fixed;
+			left: 5vw;
+			top: 0;
+			height: 60rpx;
+			width: 60rpx;
+			text-align: center;
+			font-size: 58rpx;
+		}
+
+		.bg-login {
+			position: fixed;
+			bottom: 0;
+			right: -30rpx;
+			filter: drop-shadow(-10rpx 10rpx 10rpx rgba(0, 0, 0, 0.7));
+		}
+
+		.bg-login-top-right {
+			position: fixed;
+			top: -200rpx;
+			right: -100rpx;
+			filter: drop-shadow(-10rpx 10rpx 10rpx rgba(0, 0, 0, 0.7));
+			transform: rotate(180deg);
+		}
+
+		.bg-login-bottom-left {
+			position: fixed;
+			left: 0;
+			bottom: 0;
+			mask: linear-gradient(45deg, #eee 2%, transparent 15%, transparent 10%);
+		}
+
+		.button-hover {
 			background-color: none !important;
-		}
-
-		.auth.button-hover {
 			transform: translate(0rpx, 0rpx);
 		}
-
-		.protocol {
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			font-size: 24rpx;
-			margin-top: 40rpx;
-			z-index: 2;
-
-			> image {
-				height: 40rpx;
-				width: 40rpx;
-				margin-right: 10rpx;
-			}
-
-			> navigator {
-				color: #666;
-			}
-		}
 	}
-
-	.back {
-		position: fixed;
-		left: 5vw;
-		top: 0;
-		height: 60rpx;
-		width: 60rpx;
-		text-align: center;
-		font-size: 58rpx;
-	}
-
-	.bg-login {
-		position: fixed;
-		bottom: 0;
-		right: -30rpx;
-		filter: drop-shadow(-10rpx 10rpx 10rpx rgba(0, 0, 0, 0.7));
-	}
-
-	.bg-login-top-right {
-		position: fixed;
-		top: -200rpx;
-		right: -100rpx;
-		filter: drop-shadow(-10rpx 10rpx 10rpx rgba(0, 0, 0, 0.7));
-		transform: rotate(180deg);
-	}
-
-	.bg-login-bottom-left {
-		position: fixed;
-		left: 0;
-		bottom: 0;
-		mask: linear-gradient(45deg, #eee 2%, transparent 15%, transparent 10%);
-	}
-}
 </style>

@@ -1,13 +1,8 @@
 <template>
-  <view class="wapper">
-    <view class="textarea">
-      <textarea
-        v-model="signature"
-        :row="3"
-        placeholder="请输入个性签名"
-        :auto-focus="true"
-      />
-      <view class="">
+	<view class="wapper">
+		<view class="textarea">
+			<textarea v-model="signature" :row="3" placeholder="请输入个性签名" :auto-focus="true" />
+			<view class="">
         <button class="btn">
           <image src="/static/topic.svg" mode="scaleToFill"></image>
           添加话题
@@ -103,15 +98,9 @@ export default {
         avatar: user.avatar,
       });
       this.loading = false;
-      uni.showToast({
-        duration: 3000,
-        position: "bottom",
-        icon: "none",
-        title: "发布成功",
-        success() {
-          uni.navigateBack();
-        },
-      });
+	  this.$showToast('发布成功')
+	  uni.navigateBack();
+      
     },
     handleAddTopic(item) {
       if (!~this.signature.indexOf(item.topic)) {
@@ -208,6 +197,9 @@ export default {
     font-size: 32rpx;
     text-align: center;
     margin-top: 90rpx;
+	margin-bottom: 20rpx;
+	margin-bottom: constant(safe-area-inset-bottom);
+	margin-bottom: env(safe-area-inset-bottom);
   }
 }
 </style>
