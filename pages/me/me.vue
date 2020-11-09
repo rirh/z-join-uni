@@ -3,7 +3,7 @@
 		<skeleton :row="3" animate :loading="!user.last_login_date">
 			<navigator url="/pages/me/user-info/user-info">
 				<view class="setion">
-					<image class="head-img" :src="user.avatar || '/static/headimg.svg'" mode="scaleToFill"></image>
+					<image class="head-img" :src="user.avatar || `/static/headimg-${user.gender?'male':'female'}.svg`" mode="scaleToFill"></image>
 					<view class="user-info">
 						<view class="">
 							<text class="user">{{ user.email || user.mobile || user.nickName }}</text>

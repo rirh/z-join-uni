@@ -92,7 +92,16 @@
 			}
 
 		}
-	],
+	    ,{
+            "path" : "pages/me/topic/topic",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "申请新增话题",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ],
 	"tabBar": {
 		"color": "#6E6F74",
 		"selectedColor": "#000",

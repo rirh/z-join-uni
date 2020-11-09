@@ -3,21 +3,19 @@
 		<view class="textarea">
 			<textarea v-model="signature" :row="3" placeholder="请输入个性签名" :auto-focus="true" />
 			<view class="">
-        <button class="btn">
-          <image src="/static/topic.svg" mode="scaleToFill"></image>
-          添加话题
-        </button>
+				<navigator style="display: inline-block;" url="/pages/me/topic/topic">
+					<button class="btn">
+					  <image src="/static/topic.svg" mode="scaleToFill"></image>
+					  添加话题
+					</button>
+				</navigator>
         <button
           class="btn"
           :class="{ 'btn-active': Boolean(loc.name) }"
           @click="chooseLoc"
         >
           <image
-            :src="
-              Boolean(loc.name)
-                ? '/static/loction-white.svg'
-                : '/static/loction.svg'
-            "
+            :src="`/static/loction${Boolean(loc.name)&&'-white'||''}.svg`"
             mode="scaleToFill"
           ></image>
           {{ loc.name || "选择地点" }}
@@ -87,19 +85,25 @@ export default {
       if (this.loading) return;
       this.loading = true;
       const user = this.user;
-      const result = await this.$store.dispatch("home/insterLetter", {
-        author: user.nickName,
-        catagory: [],
-        contant: "",
-        createtime: Date.now(),
-        desc: this.signature,
-        loction: JSON.stringify(this.loc),
-        uid: user._id,
-        avatar: user.avatar,
-      });
-      this.loading = false;
-	  this.$showToast('发布成功')
-	  uni.navigateBack();
+	  try{
+	  	const result = await this.$store.dispatch("home/insterLetter", {
+	  	  author: user.nickName,
+	  	  catagory: [],
+	  	  contant: "",
+	  	  createtime: Date.now(),
+	  	  desc: this.signature,
+	  	  loction: JSON.stringify(this.loc),
+	  	  uid: user._id,
+	  	  avatar: user.avatar,
+	  	});
+	  	this.loading = false;
+	  	this.$showToast('发布成功')
+	  	uni.navigateBack();
+	  }catch(e){
+	  	//TODO handle the exception
+		this.loading = false;
+	  }
+     
       
     },
     handleAddTopic(item) {

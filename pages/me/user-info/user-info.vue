@@ -3,7 +3,7 @@
 		<view class="loading" :style="{ width: `${loading}vw`, display: `${loading > 0 ? 'block' : 'none'}` }"></view>
 		<view class="avatar-wapper">
 			<navigator url="/pages/me/profile-photo/profile-photo">
-				<image class="avatar shadow" @load="loading = 0" :src="avatar || '/static/headimg.svg'" mode="scaleToFill"></image>
+				<image class="avatar shadow" @load="loading = 0" :src="avatar || `/static/headimg-${user.gender?'male':'female'}.svg`" mode="scaleToFill"></image>
 			</navigator>
 		</view>
 		<uni-section title="基本信息" type="line"></uni-section>

@@ -4,6 +4,7 @@
  */
 const db = uniCloud.database();
 const collection = db.collection('letters');
+
 module.exports = async function(event) {
 	let pageSize = event.pageSize || 0;
 	let page = event.page || 0;

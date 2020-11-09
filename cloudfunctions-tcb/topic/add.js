@@ -1,13 +1,11 @@
 /**
  *  add letter
  */
-const uniID = require('uni-id');
 const db = uniCloud.database();
-const collection = db.collection('letters');
-
+const collection = db.collection('topics');
 module.exports = async function(event) {
 	delete event.action;
-	const docid = event._id || `id_${Date.now()}`;
+	const docid = event._id || `id_topic_add_${Date.now()}`;
 	// 數據庫插入數據如果
 	const {
 		code,
@@ -15,10 +13,6 @@ module.exports = async function(event) {
 	} = await collection.doc(docid).set({
 		...event
 	});
-	await uniID.updateUser({
-		uid: event.uid,
-		signature: event.desc,
-	})
 	const result = code === 0 || id;
 	return {
 		code: Boolean(result) ? 0 : 500,
