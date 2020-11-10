@@ -6,13 +6,13 @@
 			</navigator>
 		</nav-bar>
 		<view class="content-info">
-			<image class="avatar" :src="user.avatar" mode="scaleToFill"></image>
+			<image class="avatar" :src="user.avatar||`/static/headimg-${user.gender?'male':'female'}.svg`" mode="scaleToFill"></image>
 			<view class="">
 				<view class="name">
-					<text selectable>{{ user.nickName }}</text>
+					<text  user-select>{{ user.nickName }}</text>
 				</view>
 				<view class="count">
-					<text selectable>累计发表{{ letters.length }}条个性签名</text>
+					<text  user-select>累计发表{{ letters.length }}条个性签名</text>
 				</view>
 			</view>
 		</view>
@@ -21,10 +21,10 @@
 				<skeleton :row="rowComputed" animate :loading="loading">
 					<view class="letter" @click="handle_go_edit(letter)" v-for="(letter, index) in letters" :key="index">
 						<view class="">
-							<text selectable> {{letter.desc}}</text>
+							<text  user-select> {{letter.desc}}</text>
 						</view>
 						<view class="extr-info" v-if="JSON.parse(letter.loction).name">
-							<view class="tag" @click="handleOpenLoction(letter.loction)">
+							<view class="tag" @click.stop="handleOpenLoction(letter.loction)">
 								<image class="loc" src="/static/loction-white.svg" mode="scaleToFill"></image>
 								<text class="loc-name">{{ JSON.parse(letter.loction).name }}</text>
 							</view>
@@ -33,12 +33,15 @@
 					<load-more :status="moreStatus" />
 				</skeleton>
 			</view>
-
 		</scroll-view>
+		<uni-popup ref="popup" type="dialog">
+			<view class="auth-pop">
+				开始创作我的个性签名。
+			</view>
+		</uni-popup>
 	</view>
 </template>
 <script>
-	console.log();
 	import banner from "./swiper.vue";
 	import moment from "moment";
 	import {
@@ -47,12 +50,14 @@
 	import navBar from "components/uni-nav-bar/uni-nav-bar.vue";
 	import skeleton from "components/skeleton/skeleton.vue";
 	import loadMore from "components/uni-load-more/uni-load-more.vue";
+	import uniPopup from '@/components/uni-popup/uni-popup.vue';
 	export default {
 		components: {
 			navBar,
 			banner,
 			skeleton,
 			loadMore,
+			uniPopup
 		},
 		data() {
 			return {
@@ -85,6 +90,7 @@
 					url: "/pages/auth/login/login",
 				});
 			}
+			// this.$refs.popup.open()
 		},
 		onShow() {
 			if (!this.letters.length) this.init();
@@ -250,5 +256,14 @@
 			border-radius: 50%;
 			margin-right: 30rpx;
 		}
+	}
+
+	.auth-pop {
+		background-color: white;
+		height: 90rpx;
+		display: grid;
+		border-radius: 20rpx;
+		place-items: center;
+		padding: 20rpx;
 	}
 </style>

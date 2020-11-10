@@ -1,7 +1,7 @@
 // 本文件中的json内容将在云函数【运行】时作为参数传给云函数。
 // 配置教程参考：https://uniapp.dcloud.net.cn/uniCloud/quickstart?id=runparam
 {
-	"action": "setAvatar",
-	"avatar":"https://6372-crypto2server-576164-1302901174.tcb.qcloud.la/111.png",
-	"uniIdToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI4ZTViZTcwNTVmNjc2ZGE1MDAzMTZiZDc1NWIxYWMwZSIsImNsaWVudElkIjoiZDE2NWQyNTM5Yzk1MmJmNzI2MGExNGQ3YTZlMjc1NmMiLCJpYXQiOjE2MDQyMTI3ODcsImV4cCI6MTYwNDIxOTk4N30.yvaz77oOwBI8jssdGgBYon0-M4nxVq5wTe_xxhRfvrE"
+	"action": "register",
+	"email":"only_tigerhu@163.com",
+	"code":"123456"
 }

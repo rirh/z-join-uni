@@ -9,7 +9,7 @@
 					</view>
 					<view class="contant">
 						<view class="">
-							<text selectable>{{item.desc}}</text>
+							<text  user-select>{{item.desc}}</text>
 
 						</view>
 

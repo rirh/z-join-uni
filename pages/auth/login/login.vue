@@ -69,7 +69,7 @@
 			}) {
 				if (!this.agreen) {
 					this.$showToast('请阅读并同意用户服务协议及隐私权政策')
-					
+
 					return;
 				}
 				uni.showLoading();
@@ -114,41 +114,24 @@
 			},
 			async handle_sumbit() {
 				if (!this.agreen) {
-					this.$showToast('请阅读并同意用户服务协议及隐私权政策')
-					
-			
+					this.$showToast('请阅读并同意用户服务协议及隐私权政策');
 					return;
 				}
-				const isEmail = this.username.indexOf('@') > -1;
-				let params;
-				if (isEmail) {
-					params = {
-						action: 'verifyEmailCode',
-						email: this.username,
-						type: 'register',
-						code: this.code
-					};
-					if (!/.+@.+/.test(this.username)) {
-						uni.showModal({
-							content: '请输入正确的邮箱',
-							showCancel: false
-						});
-						return;
-					}
-				} else {
-					params = {
-						action: 'verifyMobileCode',
-						mobile: this.username,
-						type: 'register',
-						code: this.code
-					};
-					if (!/^1\d{10}$/.test(this.username)) {
-						uni.showModal({
-							content: '请输入正确的手机号',
-							showCancel: false
-						});
-						return;
-					}
+				const isCorrectEmail = /.+@.+/.test(this.username);
+				const isCorrectPhone = /^1\d{10}$/.test(this.username);
+				if (!isCorrectEmail) {
+					uni.showModal({
+						content: '请输入正确的邮箱',
+						showCancel: false
+					});
+					return;
+				}
+				if (!isCorrectPhone) {
+					uni.showModal({
+						content: '请输入正确的手机号',
+						showCancel: false
+					});
+					return;
 				}
 				if (!this.code) {
 					uni.showModal({
@@ -157,7 +140,13 @@
 					});
 					return;
 				}
+				let params = {
+					action: isCorrectEmail ? 'authWithEmail' : 'authWithPhone',
+					code: this.code,
+					[isCorrectEmail ? 'email' : 'phone']: this.username
+				};
 				this.loading = true;
+				
 				const {
 					code,
 					msg
@@ -166,25 +155,26 @@
 					data: params
 				});
 				if (!code) {
-					this.$http({
-							name: 'user-center',
-							data: {
-								action: 'auth',
-								[isEmail ? 'email' : 'mobile']: this.username,
-								code: this.code
-							}
-						})
-						.then(result => {
-							this.loading = false;
-							if (!result.code) {
-								this.$store.dispatch('auth/login', result);
-							} else {
-								this.$showToast(result.msg)
-							}
-						})
-						.catch(() => {
-							this.loading = false;
-						});
+					console.log(msg);
+					// this.$http({
+					// 		name: 'user-center',
+					// 		data: {
+					// 			action: 'auth',
+					// 			[isEmail ? 'email' : 'mobile']: this.username,
+					// 			code: this.code
+					// 		}
+					// 	})
+					// 	.then(result => {
+					// 		this.loading = false;
+					// 		if (!result.code) {
+					// 			this.$store.dispatch('auth/login', result);
+					// 		} else {
+					// 			this.$showToast(result.msg)
+					// 		}
+					// 	})
+					// 	.catch(() => {
+					// 		this.loading = false;
+					// 	});
 				} else {
 					this.loading = false;
 					this.$showToast(msg);

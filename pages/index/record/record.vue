@@ -8,7 +8,7 @@
 				</button>
 			</view>
 			<view v-if="voicePath" class="audio" @click="handle_toggle_audio">
-				<text selectable class="bg" :class="[(duration && (paused ? 'voicePlay paused' : 'voicePlay')) || '']" style="margin-left: 20rpx;"></text>
+				<text  user-select class="bg" :class="[(duration && (paused ? 'voicePlay paused' : 'voicePlay')) || '']" style="margin-left: 20rpx;"></text>
 				<text style="margin-left: 20rpx;">{{ duration || '00' }}''</text>
 			</view>
 			<view class="contant">

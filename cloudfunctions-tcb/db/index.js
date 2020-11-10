@@ -2,6 +2,7 @@
 /**
  * 此函数为数据库操作函数
  */
+const uniID = require('uni-id');
 const db = uniCloud.database();
 const collection = db.collection('letters');
 exports.main = async (event, context) => {
@@ -22,18 +23,25 @@ exports.main = async (event, context) => {
 	// // });
 	// console.log(JSON.stringify(result));
 
-	const res = await uniCloud.sendSms({
-		smsKey: '5d94035c55f67ae32cd1966798406b64',
-		smsSecret: '0104d42565d44ac6798552405524d22a',
-		phone: '13683656716',
-		templateId: '10083',
-		data: {
-			name: '注册模版',
-			code: '123456',
-			action: '注册',
-			expMinute: '3',
-		}
+	const res = await uniID.sendSmsCode({
+		mobile: '13683656716',
+		templateId: "10083",
+		code: '123456',
+		type: 'login',
 	})
+
+	// const res = await uniCloud.sendSms({
+	// 	smsKey: '5d94035c55f67ae32cd1966798406b64',
+	// 	smsSecret: '0104d42565d44ac6798552405524d22a',
+	// 	phone: '13683656716',
+	// 	templateId: '10083',
+	// 	data: {
+	// 		name: '注册模版',
+	// 		code: '123456',
+	// 		action: '注册',
+	// 		expMinute: '3',
+	// 	}
+	// })
 	// 调用成功，请注意这时不代表发送成功
 	// return res
 

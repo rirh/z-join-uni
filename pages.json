@@ -101,6 +101,15 @@
             }
             
         }
+        ,{
+            "path" : "pages/index/create/create",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "写信",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"tabBar": {
 		"color": "#6E6F74",

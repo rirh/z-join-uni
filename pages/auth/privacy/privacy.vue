@@ -1,6 +1,6 @@
 <template>
 	<view class="protocol">
-		<text>{{ nodes }}</text>
+		<text  user-select >{{ nodes }}</text>
 	</view>
 </template>
 
