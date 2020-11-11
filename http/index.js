@@ -26,6 +26,7 @@ export default (params) => {
 						store.dispatch('auth/logout')
 					default:
 						showToast(result.message)
+						reject(result)
 						break;
 				}
 

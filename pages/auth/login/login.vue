@@ -81,7 +81,6 @@
 							uni.login({
 								provider: 'weixin',
 								success: res => {
-									console.log('----------------');
 									this.$http({
 										name: 'user-center',
 										data: {
@@ -119,14 +118,14 @@
 				}
 				const isCorrectEmail = /.+@.+/.test(this.username);
 				const isCorrectPhone = /^1\d{10}$/.test(this.username);
-				if (!isCorrectEmail) {
+				if (!isCorrectEmail && !isCorrectPhone) {
 					uni.showModal({
 						content: '请输入正确的邮箱',
 						showCancel: false
 					});
 					return;
 				}
-				if (!isCorrectPhone) {
+				if (!isCorrectPhone && !isCorrectEmail) {
 					uni.showModal({
 						content: '请输入正确的手机号',
 						showCancel: false
@@ -141,44 +140,32 @@
 					return;
 				}
 				let params = {
-					action: isCorrectEmail ? 'authWithEmail' : 'authWithPhone',
-					code: this.code,
+					action: isCorrectEmail ? 'loginByEmail' : 'loginBySms',
+					code: Number(this.code),
 					[isCorrectEmail ? 'email' : 'phone']: this.username
 				};
 				this.loading = true;
-				
-				const {
-					code,
-					msg
-				} = await this.$http({
-					name: 'user-center',
-					data: params
-				});
-				if (!code) {
-					console.log(msg);
-					// this.$http({
-					// 		name: 'user-center',
-					// 		data: {
-					// 			action: 'auth',
-					// 			[isEmail ? 'email' : 'mobile']: this.username,
-					// 			code: this.code
-					// 		}
-					// 	})
-					// 	.then(result => {
-					// 		this.loading = false;
-					// 		if (!result.code) {
-					// 			this.$store.dispatch('auth/login', result);
-					// 		} else {
-					// 			this.$showToast(result.msg)
-					// 		}
-					// 	})
-					// 	.catch(() => {
-					// 		this.loading = false;
-					// 	});
-				} else {
+				try {
+					const {
+						code,
+						msg
+					} = await this.$http({
+						name: 'user-center',
+						data: params
+					});
 					this.loading = false;
-					this.$showToast(msg);
+					if (!code) {
+						this.$store.dispatch('auth/login', result);
+					} else {
+						this.loading = false;
+						this.$showToast(msg);
+					}
+
+				} catch (e) {
+					this.loading = false;
+					//TODO handle the exception
 				}
+
 			},
 			async handleSendCode() {
 				if (this.msg.endsWith('s')) return;

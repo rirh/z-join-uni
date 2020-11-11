@@ -8,7 +8,7 @@ module.exports = async (event) => {
 	 * 使用POST时参数位于event.body
 	 * 请自行处理上述场景
 	 */
-	uniCloud.logger.log('======user-center-login========')
+	uniCloud.logger.log('======user-center-loginByEmail========')
 	uniCloud.logger.log(JSON.stringify(event))
 	let result;
 	const {
@@ -16,17 +16,17 @@ module.exports = async (event) => {
 		password,
 		needPermission = true,
 		email,
-		phone
+		phone,
+		code
 	} = event;
 	const username = user || email || phone;
-	
-	result = await uniID.login({
-		username,
-		password,
+	result = await uniID.loginByEmail({
+		email,
+		code,
 		needPermission,
 	})
 	uniCloud.logger.log(JSON.stringify(result))
-	uniCloud.logger.log('======user-center-login end====')
+	uniCloud.logger.log('======user-center-loginByEmail end====')
 	//返回数据给客户端
 	return result
 };

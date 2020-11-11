@@ -65,7 +65,7 @@
 			})
 		},
 		onLoad() {
-			this.avatar = this.user.avatar;
+			this.avatar = this.user.avatarUrl;
 		},
 		methods: {
 			moment,

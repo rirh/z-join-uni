@@ -6,22 +6,22 @@
 			</navigator>
 		</nav-bar>
 		<view class="content-info">
-			<image class="avatar" :src="user.avatar||`/static/headimg-${user.gender?'male':'female'}.svg`" mode="scaleToFill"></image>
+			<image class="avatar" :src="user.avatarUrl||`/static/headimg-${user.gender?'male':'female'}.svg`" mode="scaleToFill"></image>
 			<view class="">
 				<view class="name">
-					<text  user-select>{{ user.nickName }}</text>
+					<text user-select>{{ user.nickName }}</text>
 				</view>
 				<view class="count">
-					<text  user-select>累计发表{{ letters.length }}条个性签名</text>
+					<text user-select>累计发表{{ letters.length }}条个性签名</text>
 				</view>
 			</view>
 		</view>
 		<scroll-view class="contant" scroll-y="true" scroll-with-animation @scrolltolower="fetchMoreLetters">
-			<view class="latter-wapper">
+			<view class="latter-wapper" v-if="letters.length">
 				<skeleton :row="rowComputed" animate :loading="loading">
 					<view class="letter" @click="handle_go_edit(letter)" v-for="(letter, index) in letters" :key="index">
 						<view class="">
-							<text  user-select> {{letter.desc}}</text>
+							<text user-select> {{letter.desc}}</text>
 						</view>
 						<view class="extr-info" v-if="JSON.parse(letter.loction).name">
 							<view class="tag" @click.stop="handleOpenLoction(letter.loction)">
@@ -33,6 +33,7 @@
 					<load-more :status="moreStatus" />
 				</skeleton>
 			</view>
+			<zEmpty v-else />
 		</scroll-view>
 		<uni-popup ref="popup" type="dialog">
 			<view class="auth-pop">
@@ -50,14 +51,16 @@
 	import navBar from "components/uni-nav-bar/uni-nav-bar.vue";
 	import skeleton from "components/skeleton/skeleton.vue";
 	import loadMore from "components/uni-load-more/uni-load-more.vue";
-	import uniPopup from '@/components/uni-popup/uni-popup.vue';
+	import uniPopup from 'components/uni-popup/uni-popup.vue';
+	import zEmpty from 'components/z-empty/z-empty.vue'
 	export default {
 		components: {
 			navBar,
 			banner,
 			skeleton,
 			loadMore,
-			uniPopup
+			uniPopup,
+			zEmpty
 		},
 		data() {
 			return {

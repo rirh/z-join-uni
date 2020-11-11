@@ -1,97 +1,186 @@
+// 在本文件中可配置云数据库初始化，数据格式见：https://uniapp.dcloud.io/uniCloud/cf-database?id=db_init
+
+// 编写完毕后对本文件点右键，可按配置规则创建表和添加数据
+
 {
-	"books": { // 集合（表名）
-		"title": [ // 数据
-			{
-				"IndexName": "title", // 索引名称
-				"MgoKeySchema": { // 索引规则
-					"MgoIndexKeys": [{
-						"Name": "title", // 索引字段
-						"Direction": "1" // 索引方向，1：ASC-升序，-1：DESC-降序，2dsphere：地理位置
-					}],
-					"MgoIsUnique": false // 索引是否唯一
-				}
-			}
-		],
-		"author": [ // 数据
-			{
-				"IndexName": "author", // 索引名称
-				"MgoKeySchema": { // 索引规则
-					"MgoIndexKeys": [{
-						"Name": "author", // 索引字段
-						"Direction": "1" // 索引方向，1：ASC-升序，-1：DESC-降序，2dsphere：地理位置
-					}],
-					"MgoIsUnique": false // 索引是否唯一
-				}
-			}
-
-		],
-		"catagory": [ // 数据
-			{
-				"IndexName": "catagory", // 索引名称
-				"MgoKeySchema": { // 索引规则
-					"MgoIndexKeys": [{
-						"Name": "catagory", // 索引字段
-						"Direction": "1" // 索引方向，1：ASC-升序，-1：DESC-降序，2dsphere：地理位置
-					}],
-					"MgoIsUnique": false // 索引是否唯一
-				}
-			}
-
-		],
-		"desc": [ // 数据
-
-			{
-				"IndexName": "desc", // 索引名称
-				"MgoKeySchema": { // 索引规则
-					"MgoIndexKeys": [{
-						"Name": "desc", // 索引字段
-						"Direction": "1" // 索引方向，1：ASC-升序，-1：DESC-降序，2dsphere：地理位置
-					}],
-					"MgoIsUnique": false // 索引是否唯一
-				}
-
-			}
-		],
-
-		"createtime": [ // 数据
-			{
-				"IndexName": "createtime", // 索引名称
-				"MgoKeySchema": { // 索引规则
-					"MgoIndexKeys": [{
-						"Name": "createtime", // 索引字段
-						"Direction": "1" // 索引方向，1：ASC-升序，-1：DESC-降序，2dsphere：地理位置
-					}],
-					"MgoIsUnique": false // 索引是否唯一
-				}
-			}
-		],
-		"updatetime": [ // 数据
-			{
-				"IndexName": "createtime", // 索引名称
-				"MgoKeySchema": { // 索引规则
-					"MgoIndexKeys": [{
-						"Name": "createtime", // 索引字段
-						"Direction": "1" // 索引方向，1：ASC-升序，-1：DESC-降序，2dsphere：地理位置
-					}],
-					"MgoIsUnique": false // 索引是否唯一
-				}
-			}
-		],
-		"thumbs": [ // 数据
-
-
-		],
-		"comment": [ // 数据
-
-		],
-		"index": [{ // 索引
-			"IndexName": "index", // 索引名称
-			"MgoKeySchema": { // 索引规则
+	"uni-id-users": {
+		"data": [],
+		"index": [{
+			"IndexName": "username",
+			"MgoKeySchema": {
 				"MgoIndexKeys": [{
-					"Name": "index", // 索引字段
-					"Direction": "1" // 索引方向，1：ASC-升序，-1：DESC-降序，2dsphere：地理位置
+					"Name": "username",
+					"Direction": "1"
 				}],
-				"MgoIsUnique": false // 索引是否唯一
+				"MgoIsUnique": false
+			}
+		}, {
+			"IndexName": "mobile",
+			"MgoKeySchema": {
+				"MgoIndexKeys": [{
+					"Name": "mobile",
+					"Direction": "1"
+				}],
+				"MgoIsUnique": false
+			}
+		}, {
+			"IndexName": "email",
+			"MgoKeySchema": {
+				"MgoIndexKeys": [{
+					"Name": "email",
+					"Direction": "1"
+				}],
+				"MgoIsUnique": false
+			}
+		}, {
+			"IndexName": "wx_openid.app-plus",
+			"MgoKeySchema": {
+				"MgoIndexKeys": [{
+					"Name": "wx_openid.app-plus",
+					"Direction": "1"
+				}],
+				"MgoIsUnique": false
+			}
+		}, {
+			"IndexName": "wx_openid.mp-weixin",
+			"MgoKeySchema": {
+				"MgoIndexKeys": [{
+					"Name": "wx_openid.mp-weixin",
+					"Direction": "1"
+				}],
+				"MgoIsUnique": false
+			}
+		}, {
+			"IndexName": "wx_unionid",
+			"MgoKeySchema": {
+				"MgoIndexKeys": [{
+					"Name": "wx_unionid",
+					"Direction": "1"
+				}],
+				"MgoIsUnique": false
+			}
+		}, {
+			"IndexName": "ali_openid",
+			"MgoKeySchema": {
+				"MgoIndexKeys": [{
+					"Name": "ali_openid",
+					"Direction": "1"
+				}],
+				"MgoIsUnique": false
+			}
+		}, {
+			"IndexName": "my_invite_code",
+			"MgoKeySchema": {
+				"MgoIndexKeys": [{
+					"Name": "my_invite_code",
+					"Direction": "1"
+				}],
+				"MgoIsUnique": false
+			}
+		}, {
+			"IndexName": "inviter_uid",
+			"MgoKeySchema": {
+				"MgoIndexKeys": [{
+					"Name": "inviter_uid",
+					"Direction": "1"
+				}],
+				"MgoIsUnique": false
+			}
+		}, {
+			"IndexName": "invite_time",
+			"MgoKeySchema": {
+				"MgoIndexKeys": [{
+					"Name": "invite_time",
+					"Direction": "1"
+				}],
+				"MgoIsUnique": false
+			}
+		}, {
+			"IndexName": "role",
+			"MgoKeySchema": {
+				"MgoIndexKeys": [{
+					"Name": "role",
+					"Direction": "1"
+				}],
+				"MgoIsUnique": false
+			}
+		}]
+	},
+	"uni-verify": {
+		"data": [],
+		"index": [{
+			"IndexName": "mobile",
+			"MgoKeySchema": {
+				"MgoIndexKeys": [{
+					"Name": "mobile",
+					"Direction": "1"
+				}, {
+					"Name": "code",
+					"Direction": "1"
+				}],
+				"MgoIsUnique": false
+			}
+		}, {
+			"IndexName": "email",
+			"MgoKeySchema": {
+				"MgoIndexKeys": [{
+					"Name": "email",
+					"Direction": "1"
+				}, {
+					"Name": "code",
+					"Direction": "1"
+				}],
+				"MgoIsUnique": false
+			}
+		}]
+	},
+	"uni-id-roles": {
+		"data": [],
+		"index": [{
+				"IndexName": "role_id",
+				"MgoKeySchema": {
+					"MgoIndexKeys": [{
+						"Name": "role_id",
+						"Direction": "1"
+					}],
+					"MgoIsUnique": true
+				}
+			},
+			{
+				"IndexName": "permission",
+				"MgoKeySchema": {
+					"MgoIndexKeys": [{
+						"Name": "permission",
+						"Direction": "1"
+					}],
+					"MgoIsUnique": false
+				}
+			}
+		]
+	},
+	"uni-id-permissions": {
+		"data": [],
+		"index": [{
+			"IndexName": "permission_id",
+			"MgoKeySchema": {
+				"MgoIndexKeys": [{
+					"Name": "permission_id",
+					"Direction": "1"
+				}],
+				"MgoIsUnique": true
+			}
+		}]
+	},
+	"opendb-admin-menu": {
+		"data": [],
+		"index": [{
+			"IndexName": "parent_id",
+			"MgoKeySchema": {
+				"MgoIndexKeys": [{
+					"Name": "parent_id",
+					"Direction": "1"
+				}],
+				"MgoIsUnique": false
 			}
 		}]
 	}

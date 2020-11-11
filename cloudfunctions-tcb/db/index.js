@@ -23,13 +23,13 @@ exports.main = async (event, context) => {
 	// // });
 	// console.log(JSON.stringify(result));
 
-	const res = await uniID.sendSmsCode({
-		mobile: '13683656716',
-		templateId: "10083",
-		code: '123456',
-		type: 'login',
-	})
-
+	// const res = await uniID.sendSmsCode({
+	// 	mobile: '13683656716',
+	// 	templateId: "10083",
+	// 	code: '123456',
+	// 	type: 'login',
+	// })
+	res = await uniID.loginByWeixin('0812KX0w30SbhV2jkE0w3Zqy3r22KX0P')
 	// const res = await uniCloud.sendSms({
 	// 	smsKey: '5d94035c55f67ae32cd1966798406b64',
 	// 	smsSecret: '0104d42565d44ac6798552405524d22a',

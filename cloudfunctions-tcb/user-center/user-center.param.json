@@ -1,7 +1,14 @@
 // 本文件中的json内容将在云函数【运行】时作为参数传给云函数。
 // 配置教程参考：https://uniapp.dcloud.net.cn/uniCloud/quickstart?id=runparam
 {
-	"action": "register",
-	"email":"only_tigerhu@163.com",
-	"code":"123456"
+	"action": "getUserInfo",
+	// "action": "login",
+	// "action": "sendEmailCode",
+	// "action": "register",
+	"email": "only_tigerhu@163.com",
+	"code": "0812KX0w30SbhV2jkE0w3Zqy3r22KX0P",
+	"needPermission": true,
+	"myInviteCode": "123123",
+	"password": "123123123",
+	"uid": "b333e0365fabde9f008c26bd295214c7"
 }
