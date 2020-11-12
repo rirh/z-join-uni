@@ -27,10 +27,9 @@
 			}
 		}, {
 			"path": "pages/discover/discover",
+			// "path": "pages/index/index",
 			"style": {
 				"navigationBarTitleText": "发现",
-				"navigationBarBackgroundColor": "#eee",
-				"backgroundColor": "#f6f6f6",
 				"enablePullDownRefresh": true
 			}
 		}, {

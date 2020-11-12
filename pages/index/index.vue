@@ -1,9 +1,9 @@
 <template>
 	<view class="wapper">
 		<nav-bar background-color="#eee" title="我的个性签名" :shadow="false" :border="false">
-			<navigator url="/pages/me/edit-signature/edit-signature" slot="left">
-				<image class="icon-edit" src="/static/edit.svg" mode="scaleToFill" @click="handle_go_edit"></image>
-			</navigator>
+			<!-- <navigator class="navigator" url="/pages/me/edit-signature/edit-signature" slot="left"> -->
+			<image slot="left" class="icon-edit navigator" src="/static/edit.svg" mode="scaleToFill" @click="handle_go_editsig"></image>
+			<!-- </navigator> -->
 		</nav-bar>
 		<view class="content-info">
 			<image class="avatar" :src="user.avatarUrl || `/static/headimg-${user.gender ? 'male' : 'female'}.svg`" mode="scaleToFill"></image>
@@ -138,6 +138,11 @@ export default {
 			this.page = this.page + 1;
 			this.fetchLetters();
 		},
+		handle_go_editsig() {
+			uni.navigateTo({
+				url: '/pages/me/edit-signature/edit-signature'
+			});
+		},
 		handle_go_edit(item) {
 			this.$store.commit('home/updateCurrentLetter', item);
 			uni.navigateTo({
@@ -158,8 +163,11 @@ page,
 	display: flex;
 	flex-direction: column;
 
-	navigator:active {
-		background-color: #eee;
+	.navigator:active {
+		background-color: #eee !important;
+	}
+	.navigator:focus {
+		background-color: #eee !important;
 	}
 
 	.icon-edit {
@@ -225,7 +233,7 @@ page,
 				margin-right: 8rpx;
 				height: 30rpx;
 				width: 30rpx;
-				padding-bottom: 8rpx;
+				padding-bottom: 4rpx;
 			}
 
 			.loc-name {
