@@ -213,7 +213,7 @@
 							start_timer();
 						}, 1000);
 					} else {
-						this.msg = `发送验证码`;
+						this.msg = `重新发送`;
 					}
 				};
 				uni.showLoading();

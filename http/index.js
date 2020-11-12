@@ -42,14 +42,17 @@ export default (params) => {
 		console.group()
 		console.time()
 		console.log(`============${params.name} start===============`)
-		params.data && console.log(params.data)
+		params.data && console.log(params.data);
 		// #ifdef H5
+		if (params.data)
+			params.data.uniIdToken = uni.getStorageSync('uniIdToken');
 		axios({
 				url: params.name,
 				method: 'post',
 				data: params.data
 			})
 			.then(result => success(result, reslove, params))
+			// .then(success.apply(reslove))
 			.catch(err => fail(err, reject, params))
 		// #endif
 		// #ifndef H5

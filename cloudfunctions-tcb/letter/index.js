@@ -9,22 +9,22 @@ const update = require('./update.js');
 const query = require('./query.js');
 exports.main = async (event, context) => {
 	//event为客户端上传的参数
-	uniCloud.logger.log('================event===============')
+	uniCloud.logger.log('================letter event===============')
 	uniCloud.logger.log(JSON.stringify(event))
-	uniCloud.logger.log('================event end===========')
+	const params = event.action ? event : JSON.parse(event.body);
 	let result = {};
-	result = await uniID.checkToken(event.uniIdToken)
+	result = await uniID.checkToken(params.uniIdToken)
 	if (result.code) return result;
-	const action = event.type || event.action
+	const action = params.type || params.action
 	switch (action) {
 		case 'insert':
-			result = await add(event);
+			result = await add(params);
 			break;
 		case 'delete':
-			const res = remove(event)
+			const res = remove(params)
 			break;
 		case "query":
-			result = await query(event);
+			result = await query(params);
 			break;
 		default:
 			result = {
@@ -34,9 +34,8 @@ exports.main = async (event, context) => {
 			}
 			break;
 	}
-	uniCloud.logger.log('================result===============')
 	uniCloud.logger.log(JSON.stringify(result))
-	uniCloud.logger.log('================result end===========')
+	uniCloud.logger.log('================letter end===========')
 	//返回数据给客户端
 	return result
 };
