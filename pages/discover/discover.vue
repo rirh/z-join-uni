@@ -1,23 +1,21 @@
 <template>
 	<view class="wapper">
-		<scroll-view class="scrollviwe" :scroll-y="true">
-			<skeleton :row="rowComputed" animate :loading="loading">
-				<view class="card" v-for="(item, index) in letters" @click="handle_to_record(item)" :key="index">
-					<view class="header">
-						<image class="avatar" :src="item.avatar|| `/static/headimg-${user.gender?'male':'female'}.svg`" mode="scaleToFill"></image>
-						<text class="flex-sub">{{item.author}}</text>
-					</view>
-					<view class="contant">
-						<view class="">
-							<text  user-select>{{item.desc}}</text>
-
-						</view>
-
-					</view>
+		<skeleton :row="rowComputed" animate :loading="loading">
+			<view class="card" v-for="(item, index) in letters" @click="handle_to_record(item)" :key="index">
+				<view class="header">
+					<image class="avatar" :src="item.avatar|| `/static/headimg-${user.gender?'male':'female'}.svg`" mode="scaleToFill"></image>
+					<text class="flex-sub">{{item.author}}</text>
 				</view>
-				<load-more :status="moreStatus" />
-			</skeleton>
-		</scroll-view>
+				<view class="contant">
+					<view class="">
+						<text user-select>{{item.desc}}</text>
+
+					</view>
+
+				</view>
+			</view>
+			<load-more :status="moreStatus" />
+		</skeleton>
 	</view>
 </template>
 
@@ -87,21 +85,27 @@
 				return uni.getSystemInfoSync().windowHeight / 30
 			},
 		},
-		onLoad() {
+
+		onShow() {
 			const user = uni.getStorageSync('uniIdToken');
 			if (!user) {
 				uni.navigateTo({
 					url: '/pages/auth/login/login'
 				});
 			}
+			if (!this.letters.length) {
+				this.loading = true;
+				this.fetchLetters()
+			}
 		},
-		onLoad() {
-			this.init()
-
-		},
-		onShow() {
+		onPullDownRefresh() {
+			this.loading = true;
 			this.page = 0;
-			this.letters = [];
+			this.fetchLetters()
+		},
+		onReachBottom() {
+			if (this.moreStatus === 'noMore') return;
+			this.page = this.page + 1;
 			this.fetchLetters()
 		},
 		methods: {
@@ -127,9 +131,10 @@
 					data,
 					total
 				} = this.storeletters;
-				this.letters = [...this.letters, ...data];
-				this.moreStatus = this.letters.length + (this.page * this.pageSize) < total ? 'more' : 'noMore';
+				this.letters = this.page > 0 ? [...this.letters, ...data] : data;
+				this.moreStatus = this.letters.length + (this.page * this.pageSize) > total ? 'noMore' : 'more';
 				this.loading = false;
+				uni.stopPullDownRefresh()
 			},
 			handle_to_record(item) {
 				this.$store.commit('home/updateCurrentLetter', item)
@@ -154,14 +159,14 @@
 <style lang="scss" scoped>
 	page,
 	.wapper {
-		height: 100vh;
 		background-color: #eee;
-		overflow: hidden;
+		// overflow: hidden;
 		/* #ifndef APP-PLUS */
 		// padding-top: 30rpx;
 		// padding-top: var(--status-bar-height);
-
+		padding-bottom: 10rpx;
 		/* #endif */
+
 		.scrollviwe {
 			height: 100%;
 		}

@@ -14,7 +14,7 @@ const auth = {
 			return state.isLogin;
 		},
 		user(state) {
-			return state.userinfo;
+			return state.userinfo || {};
 		}
 	},
 	mutations: {
@@ -31,11 +31,14 @@ const auth = {
 		login(state, {
 			token,
 			userInfo,
-			tokenExpired
+			tokenExpired,
+			uid
 		}) {
 			uni.setStorageSync('uniIdToken', token);
 			uni.setStorageSync('uniIdTokenExpired', tokenExpired);
 			uni.setStorageSync('userinfo', userInfo);
+			uni.setStorageSync('uid', uid);
+
 			state.userinfo = userInfo;
 			state.isLogin = true;
 			uni.switchTab({
@@ -43,6 +46,14 @@ const auth = {
 			});
 		},
 		logout(state) {
+			const token = uni.getStorageSync('uniIdToken');
+			uniCloud.callFunction({
+				name: 'user-center',
+				data: {
+					action: 'logout',
+					token
+				}
+			})
 			uni.removeStorageSync('uniIdToken')
 			uni.removeStorageSync('uniIdTokenExpired')
 			uni.removeStorageSync('userinfo')
@@ -50,21 +61,22 @@ const auth = {
 			state.userinfo = {};
 			state.isLogin = false;
 			uni.navigateTo({
-				url: '/pages/auth/login/login'
+				url: '/pages/auth/login/login',
 			})
+
 		}
 	},
 	actions: {
 		async updatePwd(state, payload) {
 			const {
-				_id,
 				password
 			} = uni.getStorageSync('userinfo')
+			const uid = uni.getStorageSync('uid')
 			const result = await client({
 				name: 'user-center',
 				data: {
 					action: Boolean(password) ? 'updatePwd' : 'resetPwd',
-					uid: _id,
+					uid,
 					...payload
 				}
 			})
@@ -72,13 +84,11 @@ const auth = {
 			return result;
 		},
 		async getUserInfo(state) {
-			const {
-				_id
-			} = uni.getStorageSync('userinfo')
+			const uid = uni.getStorageSync('uid')
 			const result = await client({
 				name: 'user-center',
 				data: {
-					uid: _id,
+					uid,
 					action: 'getUserInfo'
 				}
 			})
@@ -88,9 +98,8 @@ const auth = {
 			state.commit('login', params)
 		},
 		async update(state, params) {
-			const {
-				_id
-			} = uni.getStorageSync('userinfo')
+
+			const uid = uni.getStorageSync('uid')
 			const token = uni.getStorageSync('uniIdToken')
 			const {
 				code
@@ -98,7 +107,7 @@ const auth = {
 				name: 'user-center',
 				data: {
 					action: 'updateUser',
-					uid: _id,
+					uid,
 					token,
 					...params
 				}

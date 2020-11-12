@@ -1,7 +1,5 @@
 'use strict';
 const uniID = require('uni-id')
-const nodemailer = require("nodemailer");
-const mailer = require('./mailer.js')
 const register = require('./register.js')
 const loginByEmail = require('./loginByEmail.js')
 const sendEmailCode = require('./sendEmailCode.js')
@@ -27,11 +25,14 @@ exports.main = async (event) => {
 			break;
 		case "loginByEmail":
 			result = await loginByEmail(params)
+			result.userInfo = {
+				...result.userInfo
+			}
 			break;
 		case "sendEmailCode":
 			const code = await sendEmailCode(params)
 			params.code = code;
-			params.type = "login"
+			params.type = "login";
 			result = await uniID.setVerifyCode(params);
 			break;
 		case "bindEmail":
@@ -63,7 +64,21 @@ exports.main = async (event) => {
 				uid: params.uid,
 			})
 			break;
-
+		case "updateUser":
+			result = await updateUserInfo(params)
+			break;
+		case "resetPwd":
+			result = await uniID.resetPwd({
+				uid: params.uid,
+				password: params.newPassword
+			})
+			break;
+		case "updatePwd":
+			result = await uniID.updatePwd(params)
+			break;
+		case "logout":
+			result = await uniID.logout(event.token)
+			break;
 		default:
 			result = {
 				code: 400,

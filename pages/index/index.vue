@@ -1,7 +1,7 @@
 <template>
 	<view class="wapper">
 		<nav-bar background-color="#eee" title="我的个性签名" :shadow="false" :border="false">
-			<navigator url="/pages/index/record/record" slot="left">
+			<navigator url="/pages/me/edit-signature/edit-signature" slot="left">
 				<image class="icon-edit" src="/static/edit.svg" mode="scaleToFill" @click="handle_go_edit"></image>
 			</navigator>
 		</nav-bar>
@@ -16,25 +16,27 @@
 				</view>
 			</view>
 		</view>
-		<scroll-view class="contant" scroll-y="true" scroll-with-animation @scrolltolower="fetchMoreLetters">
-			<view class="latter-wapper" v-if="letters.length">
+		<view class="contant">
+			<view class="latter-wapper">
 				<skeleton :row="rowComputed" animate :loading="loading">
-					<view class="letter" @click="handle_go_edit(letter)" v-for="(letter, index) in letters" :key="index">
-						<view class="">
-							<text user-select> {{letter.desc}}</text>
-						</view>
-						<view class="extr-info" v-if="JSON.parse(letter.loction).name">
-							<view class="tag" @click.stop="handleOpenLoction(letter.loction)">
-								<image class="loc" src="/static/loction-white.svg" mode="scaleToFill"></image>
-								<text class="loc-name">{{ JSON.parse(letter.loction).name }}</text>
+					<view v-if="letters.length">
+						<view class="letter" @click="handle_go_edit(letter)" v-for="(letter, index) in letters" :key="index">
+							<view class="">
+								<text user-select> {{letter.desc}}</text>
+							</view>
+							<view class="extr-info" v-if="JSON.parse(letter.loction).name">
+								<view class="tag" @click.stop="handleOpenLoction(letter.loction)">
+									<image class="loc" src="/static/loction-white.svg" mode="scaleToFill"></image>
+									<text class="loc-name">{{ JSON.parse(letter.loction).name }}</text>
+								</view>
 							</view>
 						</view>
+						<load-more v-show="letters.length>8" :status="moreStatus" />
 					</view>
-					<load-more :status="moreStatus" />
+					<zEmpty v-else />
 				</skeleton>
 			</view>
-			<zEmpty v-else />
-		</scroll-view>
+		</view>
 		<uni-popup ref="popup" type="dialog">
 			<view class="auth-pop">
 				开始创作我的个性签名。
@@ -84,9 +86,7 @@
 			},
 
 		},
-		onTabItemTap() {
-			this.init();
-		},
+
 		onLoad() {
 			if (!this.isLogin) {
 				uni.navigateTo({
@@ -96,7 +96,10 @@
 			// this.$refs.popup.open()
 		},
 		onShow() {
-			if (!this.letters.length) this.init();
+			if (!this.letters.length) {
+				this.loading = true;
+				this.init();
+			}
 		},
 		onPullDownRefresh() {
 			this.loading = true;
@@ -110,11 +113,12 @@
 				uni.stopPullDownRefresh()
 			},
 			async fetchLetters() {
+				const uid = uni.getStorageSync('uid');
 				const payload = {
 					name: "letter",
 					data: {
 						action: "query",
-						uid: this.user._id,
+						uid: uid,
 						page: this.page,
 						pageSize: this.pageSize
 					},
@@ -168,6 +172,10 @@
 		display: flex;
 		flex-direction: column;
 
+		navigator:active {
+			background-color: #eee;
+		}
+
 		.icon-edit {
 			height: 40rpx;
 			width: 40rpx;
@@ -179,6 +187,15 @@
 			display: flex;
 			align-items: center;
 			color: #333;
+			/* #ifndef APP-PLUS-NVUE */
+			display: flex;
+			position: -webkit-sticky;
+			/* #endif */
+			position: sticky;
+			top: var(--window-top);
+			z-index: 99;
+
+
 
 			.name {
 				font-weight: 600;

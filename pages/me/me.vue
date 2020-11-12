@@ -1,12 +1,12 @@
 <template>
 	<view class="wapper">
-		<skeleton :row="3" animate :loading="!user.avatarUrl">
+		<skeleton :row="3" animate :loading="!user">
 			<navigator url="/pages/me/user-info/user-info">
 				<view class="setion">
 					<image class="head-img" :src="user.avatarUrl || `/static/headimg-${user.gender?'male':'female'}.svg`" mode="scaleToFill"></image>
 					<view class="user-info">
 						<view class="">
-							<text class="user">{{ user.email || user.mobile || user.nickName }}</text>
+							<text class="user">{{ user.nickName||user.email || user.mobile  }}</text>
 						</view>
 						<view class="">
 							<text class="id">上次登录时间：{{ moment(user.last_login_date).format('YYYY-MM-DD hh:mm') }}</text>

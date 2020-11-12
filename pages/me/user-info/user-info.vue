@@ -64,7 +64,7 @@
 				user: 'auth/user'
 			})
 		},
-		onLoad() {
+		onShow() {
 			this.avatar = this.user.avatarUrl;
 		},
 		methods: {
@@ -150,6 +150,7 @@
 	page,
 	.wapper {
 		background-color: #eee;
+		padding-bottom: 200rpx;
 	}
 
 	.loading {

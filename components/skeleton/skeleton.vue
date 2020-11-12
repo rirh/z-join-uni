@@ -4,7 +4,7 @@
 			<view class="avatar-class" :style="{ width: avatarSize, height: avatarSize }" :class="[avatarShapeClass, bannerClass]"></view>
 			<view class="row" :style="{ width: rowWidth }">
 				<view v-if="title" class="row-class lx-skeleton_title"></view>
-				<view v-for="(item, index) in row" :key="index" class="row-class"></view>
+				<view v-for="(item, index) in rowArray" :key="index" class="row-class"></view>
 			</view>
 		</view>
 		<slot v-if="!loading"></slot>
@@ -68,6 +68,9 @@
 			// }
 		},
 		computed: {
+			rowArray() {
+				return Array(Math.floor(this.row)).fill({})
+			},
 			avatarClass() {
 				if (this.avatar == "top") {
 					return ["lx-skeleton_avator__top"];

@@ -164,6 +164,21 @@
     "h5" : {
         "uniStatistics" : {
             "enable" : true
-        }
+        },
+        "router" : {
+            "mode" : "history"
+        },
+        "devServer" : {
+            "https" : false
+        },
+        "optimization" : {
+            "treeShaking" : {
+                "enable" : true
+            }
+        },
+        "sdkConfigs" : {
+            "maps" : {}
+        },
+        "title" : "见字如见你"
     }
 }

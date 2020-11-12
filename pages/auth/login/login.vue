@@ -116,6 +116,13 @@
 					this.$showToast('请阅读并同意用户服务协议及隐私权政策');
 					return;
 				}
+				if (!this.code) {
+					uni.showModal({
+						content: '请输入验证码',
+						showCancel: false
+					});
+					return;
+				}
 				const isCorrectEmail = /.+@.+/.test(this.username);
 				const isCorrectPhone = /^1\d{10}$/.test(this.username);
 				if (!isCorrectEmail && !isCorrectPhone) {
@@ -132,13 +139,7 @@
 					});
 					return;
 				}
-				if (!this.code) {
-					uni.showModal({
-						content: '请输入验证码',
-						showCancel: false
-					});
-					return;
-				}
+
 				let params = {
 					action: isCorrectEmail ? 'loginByEmail' : 'loginBySms',
 					code: Number(this.code),
@@ -146,13 +147,15 @@
 				};
 				this.loading = true;
 				try {
-					const {
-						code,
-						msg
-					} = await this.$http({
+					const result = await this.$http({
 						name: 'user-center',
 						data: params
 					});
+					console.log(result)
+					const {
+						code,
+						msg
+					} = result;
 					this.loading = false;
 					if (!code) {
 						this.$store.dispatch('auth/login', result);

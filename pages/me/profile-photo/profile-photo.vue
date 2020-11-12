@@ -22,7 +22,8 @@
 		},
 		data() {
 			return {
-				path: ''
+				path: '',
+				loading: 0
 			}
 		},
 		onLoad() {
@@ -69,7 +70,7 @@
 									fileList: [fileID]
 								});
 								this.$store.dispatch('auth/update', {
-									avatar: tempFileURL
+									avatarUrl: tempFileURL
 								})
 								uni.hideLoading()
 								this.path = tempFileURL;

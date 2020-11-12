@@ -129,6 +129,9 @@ export default {
 .wapper {
   background-color: #eee;
   height: 100vh;
+  /* #ifndef APP-PLUS */
+   height: calc(100vh - 90rpx) ;
+  /* #endif */
   width: 100vw;
   overflow: hidden;
   display: flex;

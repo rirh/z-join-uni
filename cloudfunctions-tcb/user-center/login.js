@@ -19,7 +19,6 @@ module.exports = async (event) => {
 		phone
 	} = event;
 	const username = user || email || phone;
-	
 	result = await uniID.login({
 		username,
 		password,

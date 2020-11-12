@@ -1,5 +1,6 @@
 import lib from 'lib/utils';
 import store from 'store/index.js'
+import axios from 'http/h5request.js';
 const {
 	showToast
 } = lib;
@@ -10,6 +11,9 @@ export default (params) => {
 		console.time()
 		console.log(`============${params.name} start===============`)
 		params.data && console.log(params.data)
+		// #ifdef H5
+
+		// #endif
 		uniCloud.callFunction(params)
 			.then(({
 				result

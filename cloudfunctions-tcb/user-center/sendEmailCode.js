@@ -12,7 +12,7 @@ module.exports = async (event) => {
 	let result = '';
 	const email = event.email;
 	const res = await mailer(email);
-	result = res.code;
+	result = Number(res.code);
 	uniCloud.logger.log(result)
 	uniCloud.logger.log('======user-center-sendemail end=====')
 	return result;
