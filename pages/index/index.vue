@@ -152,7 +152,7 @@ export default {
 page,
 .wapper {
 	background-color: #eee;
-	// height: 100vh;
+	min-height: 100vh;
 	width: 100vw;
 	// overflow: hidden;
 	display: flex;
