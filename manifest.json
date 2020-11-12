@@ -166,7 +166,8 @@
             "enable" : true
         },
         "router" : {
-            "mode" : "history"
+            "mode" : "hash",
+            "base" : "./"
         },
         "devServer" : {
             "https" : false
