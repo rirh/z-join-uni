@@ -1,7 +1,7 @@
 <template>
 	<view class="wapper">
 		<view class="textarea">
-			<textarea v-model="signature" :row="3" placeholder="请输入个性签名" :auto-focus="true" />
+			<textarea v-model="signature" :row="3" :maxlength="-1" placeholder="请输入个性签名" :auto-focus="true" />
 			<view class="">
 				<navigator style="display: inline-block;" url="/pages/me/topic/topic">
 					<button class="btn">
@@ -31,7 +31,7 @@
       >
         <view class="flex-sub">
           <view class="topic">
-            {{ topic.topic }}
+            {{ topic.name }}
           </view>
           <view class="subscription">
             {{ topic.subscription }}人添加该话题
@@ -59,39 +59,40 @@ export default {
       loc: {},
       loading: false,
       curentTopic: {},
-      topicList: [
-        {
-          topic: "#所爱隔山海 山海不可平#",
-          subscription: "21315523",
-        },
-        {
-          topic: "#所爱隔山海 山海亦可平#",
-          subscription: "55231236",
-        },
-        {
-          topic: "#十一月你好#",
-          subscription: "817253415",
-        },
-      ],
     };
   },
   computed: {
     ...mapGetters({
       user: "auth/user",
+	  topicList:'topic/topiclist'
     }),
+  },
+  onShow() {
+  	this.$store.dispatch('topic/fetchTopic',{
+		name:'topic',
+	    data:{
+			action:'query',
+			page:0,
+			pageSize:100,
+		}
+	})
   },
   methods: {
     async handle_sumbit() {
       if (this.loading) return;
       this.loading = true;
       const user = this.user;
+	  if(!this.signature){
+		 this.$showToast('请输入个性签名！') 
+		 return;
+	  }
 	  try{
 	  	const result = await this.$store.dispatch("home/insterLetter", {
 	  	  author: user.nickName,
 	  	  catagory: [],
 	  	  contant: "",
 	  	  createtime: Date.now(),
-	  	  desc: this.signature,
+	  	  desc: this.signature.trim(),
 	  	  loction: JSON.stringify(this.loc),
 	  	  uid: user._id,
 	  	  avatar: user.avatar,
@@ -107,8 +108,8 @@ export default {
       
     },
     handleAddTopic(item) {
-      if (!~this.signature.indexOf(item.topic)) {
-        this.signature += item.topic;
+      if (!~this.signature.indexOf(item.name)) {
+        this.signature += item.name;
       }
     },
     chooseLoc() {

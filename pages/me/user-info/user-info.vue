@@ -3,9 +3,16 @@
 		<view class="loading" :style="{ width: `${loading}vw`, display: `${loading > 0 ? 'block' : 'none'}` }"></view>
 		<view class="avatar-wapper">
 			<navigator url="/pages/me/profile-photo/profile-photo">
-				<image class="avatar shadow" @load="loading = 0" :src="avatar || `/static/headimg-${user.gender?'male':'female'}.svg`" mode="scaleToFill"></image>
+				<image class="avatar shadow" @load="loading = 0" :src="avatar || `/static/headimg-${user.gender?'male':'female'}.svg`"
+				 mode="scaleToFill"></image>
 			</navigator>
 		</view>
+		<uni-section title="个性签名" type="line"></uni-section>
+		<navigator url="/pages/me/signature/signature">
+			<view class="section">
+				<view class="label">{{user.signature||'这个人很懒什么也没有留下'}} </view>
+			</view>
+		</navigator>
 		<uni-section title="基本信息" type="line"></uni-section>
 		<navigator url="/pages/me/nick-name/nick-name">
 			<view class="section">
@@ -34,12 +41,7 @@
 			<view class="contant" style="color: #666;margin-right:20rpx ;">{{ user.language }}</view>
 		</view>
 
-		<uni-section title="个性签名" type="line"></uni-section>
-		<navigator url="/pages/me/signature/signature">
-			<view class="section">
-				<view class="label">{{user.signature||'这个人很懒什么也没有留下'}} </view>
-			</view>
-		</navigator>
+
 	</view>
 </template>
 
@@ -183,6 +185,8 @@
 			font-size: 32rpx;
 			margin-left: 20rpx;
 			color: #333;
+			padding: 10rpx;
+			
 		}
 
 		.contant {

@@ -62,7 +62,6 @@
 				"navigationBarBackgroundColor": "#eee",
 				"backgroundColor": "#eee"
 			}
-
 		}, {
 			"path": "pages/me/security/security",
 			"style": {
@@ -97,14 +96,6 @@
 				"navigationBarTitleText": "申请新增话题",
 				"enablePullDownRefresh": false
 			}
-
-		}, {
-			"path": "pages/index/create/create",
-			"style": {
-				"navigationBarTitleText": "写信",
-				"enablePullDownRefresh": false
-			}
-
 		}
 	],
 	"tabBar": {

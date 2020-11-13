@@ -3,7 +3,7 @@
  * 
  */
 const db = uniCloud.database();
-const collection = db.collection('letters');
+const collection = db.collection('topics');
 
 module.exports = async function(event) {
 	let pageSize = event.pageSize || 0;
@@ -14,12 +14,11 @@ module.exports = async function(event) {
 		uid
 	} : {}
 	let {
-		data=[]
+		data
 	} = await collection
 		.where(where)
 		.skip(page * pageSize)
 		.limit(pageSize)
-		.orderBy("createtime", 'desc')
 		.get();
 	const {
 		total

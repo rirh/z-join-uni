@@ -4,8 +4,11 @@
  */
 const uniID = require('uni-id');
 const db = uniCloud.database();
-const collection = db.collection('letters');
+const collection = db.collection('topics');
 exports.main = async (event, context) => {
+	const res = await collection.where({
+		name: '第一个话题'
+	}).get()
 	// const result = await collection.count()
 	// console.log(result,result.total);
 	// console.log(result.total+1);
@@ -29,7 +32,7 @@ exports.main = async (event, context) => {
 	// 	code: '123456',
 	// 	type: 'login',
 	// })
-	res = await uniID.loginByWeixin('0812KX0w30SbhV2jkE0w3Zqy3r22KX0P')
+	// res = await uniID.loginByWeixin('0812KX0w30SbhV2jkE0w3Zqy3r22KX0P')
 	// const res = await uniCloud.sendSms({
 	// 	smsKey: '5d94035c55f67ae32cd1966798406b64',
 	// 	smsSecret: '0104d42565d44ac6798552405524d22a',

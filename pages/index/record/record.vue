@@ -8,7 +8,7 @@
 				</button>
 			</view>
 			<view v-if="voicePath" class="audio" @click="handle_toggle_audio">
-				<text  user-select class="bg" :class="[(duration && (paused ? 'voicePlay paused' : 'voicePlay')) || '']" style="margin-left: 20rpx;"></text>
+				<text user-select class="bg" :class="[(duration && (paused ? 'voicePlay paused' : 'voicePlay')) || '']" style="margin-left: 20rpx;"></text>
 				<text style="margin-left: 20rpx;">{{ duration || '00' }}''</text>
 			</view>
 			<view class="contant">
@@ -91,22 +91,29 @@
 				this.loading = true
 				const url = await this.$store.dispatch('home/updateAudio', this.voicePath);
 				const user = this.user;
-				const result = await this.$store.dispatch("home/insterLetter", {
-					author: user.nickName,
-					catagory: [],
-					contant: "",
-					createtime: Date.now(),
-					desc: this.letter.desc,
-					loction: this.letter.loction || '{}',
-					uid: user._id,
-					avatar: user.avatar,
-					audioPath: url,
-					to: this.toAuth,
-					_id: user._id
-				});
-				this.loading = false;
-				this.$showToast('发布成功')
-				uni.navigateBack();
+				try {
+					const result = await this.$store.dispatch("home/insterLetter", {
+						author: user.nickName,
+						catagory: [],
+						contant: "",
+						createtime: Date.now(),
+						desc: this.letter.desc,
+						loction: this.letter.loction || '{}',
+						uid: user._id,
+						avatar: user.avatar,
+						audioPath: url,
+						to: this.toAuth,
+						_id: user._id
+					});
+					this.loading = false;
+					this.$showToast('发布成功')
+					uni.navigateBack();
+				} catch (e) {
+					//TODO handle the exception
+					this.loading = false;
+					this.$showToast('发布失败')
+				}
+
 
 			},
 			handle_toggle_audio() {
@@ -267,6 +274,8 @@
 				height: 90rpx;
 				width: 80vw;
 				font-size: 28rpx;
+				background-color: #f4f4f4;
+				color: #000;
 
 				>image {
 					height: 40rpx;

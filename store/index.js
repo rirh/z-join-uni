@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import auth from './auth.js'
 import home from './home.js'
 import discover from './discover.js'
+import topic from './topic.js'
 
 Vue.use(Vuex)
 
@@ -11,6 +12,7 @@ const store = new Vuex.Store({
 		auth,
 		home,
 		discover,
+		topic
 	}
 })
 export default store
