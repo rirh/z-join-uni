@@ -1,7 +1,9 @@
 'use strict';
 const uniID = require('uni-id')
 const mailer = require('./mailer.js')
-
+const {
+	generateInviteCode
+} = require('./utils.js')
 module.exports = async (event) => {
 	/* 如果你通过云函数Url访问
 	 * 使用GET时参数位于event.queryStringParameters
@@ -17,14 +19,38 @@ module.exports = async (event) => {
 		needPermission = true,
 		email,
 		phone,
-		code
+		code,
+		role,
+		type,
+		my_invite_code
 	} = event;
 	const username = user || email || phone;
 	result = await uniID.loginByEmail({
-		email,
+		email: username,
 		code,
 		needPermission,
 	})
+
+
+	if (my_invite_code) {
+		const myInviteCode = generateInviteCode(username).toUpperCase();
+		await uniID.updateUser({
+			uid: result.uid,
+			myInviteCode,
+			password
+		})
+		await uniID.acceptInvite({
+			uid: result.uid,
+			inviteCode: my_invite_code
+		})
+	}
+
+	if (role && role.length) {
+		await uniID.bindRole({
+			uid: result.uid,
+			roleList: role
+		})
+	}
 	uniCloud.logger.log(JSON.stringify(result))
 	uniCloud.logger.log('======user-center-loginByEmail end====')
 	//返回数据给客户端

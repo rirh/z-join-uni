@@ -4,6 +4,27 @@ const register = require('./register.js')
 const loginByEmail = require('./loginByEmail.js')
 const sendEmailCode = require('./sendEmailCode.js')
 const updateUserInfo = require('./updateUserInfo.js')
+const login = require('./login.js');
+
+/**
+ * @param {Object} 
+ */
+function isJSON(str) {
+	if (typeof str == 'string') {
+		try {
+			if (str.indexOf('{') > -1) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (e) {
+			console.log(e);
+			return false;
+		}
+	}
+	return false;
+}
+
 exports.main = async (event) => {
 	/* 如果你通过云函数Url访问
 	 * 使用GET时参数位于event.queryStringParameters
@@ -12,8 +33,9 @@ exports.main = async (event) => {
 	 */
 	uniCloud.logger.log('==============user-center==============')
 	uniCloud.logger.log(JSON.stringify(event))
+	event = isJSON(event) ? JSON.parse(event) : event;
 	const action = event.action || JSON.parse(event.body).action || JSON.parse(event.body).type || '';
-	uniCloud.logger.log(action)
+	uniCloud.logger.log(action);
 	let result = {}
 	const params = event.action ? event : JSON.parse(event.body);
 	switch (action) {
