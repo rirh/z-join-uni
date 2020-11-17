@@ -170,11 +170,11 @@
             "base" : "./"
         },
         "devServer" : {
-            "https" : false
+            "https" : true
         },
         "optimization" : {
             "treeShaking" : {
-                "enable" : true
+                "enable" : false
             }
         },
         "sdkConfigs" : {
