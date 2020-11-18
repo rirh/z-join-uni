@@ -6,6 +6,8 @@ const sendEmailCode = require('./sendEmailCode.js')
 const updateUserInfo = require('./updateUserInfo.js')
 const login = require('./login.js');
 const getInviteCode = require('./getInviteCode.js')
+const query = require('./query.js')
+const remove = require('./delete.js')
 /**
  * @param {Object} 
  */
@@ -39,6 +41,12 @@ exports.main = async (event) => {
 	let result = {}
 	const params = event.action ? event : JSON.parse(event.body);
 	switch (action) {
+		case "queryUser":
+			result = await query(params)
+			break;
+		case "deleteUser":
+			result = await remove(params)
+			break;
 		case "inviteCode":
 			result = await getInviteCode(params)
 			break;

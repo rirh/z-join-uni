@@ -30,18 +30,22 @@ module.exports = async (event) => {
 		code,
 		needPermission,
 	})
-
-
+	console.log(my_invite_code);
 	if (my_invite_code) {
-		const myInviteCode = generateInviteCode(username).toUpperCase();
-		await uniID.updateUser({
-			uid: result.uid,
-			myInviteCode,
-			password
-		})
 		await uniID.acceptInvite({
 			uid: result.uid,
 			inviteCode: my_invite_code
+		})
+		const myInviteCode = await generateInviteCode(username).toUpperCase();
+		const encResult = await uniID.encryptPwd(password)
+		await uniID.updateUser({
+			uid: result.uid,
+			password: encResult,
+			username
+		})
+		await uniID.setUserInviteCode({
+			uid: result.uid,
+			myInviteCode
 		})
 	}
 
