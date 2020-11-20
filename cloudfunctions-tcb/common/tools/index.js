@@ -14,6 +14,25 @@ const sha512 = function(source, salt) {
 		Hash: value
 	}
 }
+
+/**
+ * @param {Object} 
+ */
+function isJSON(str) {
+	if (typeof str == 'string') {
+		try {
+			if (str.indexOf('{') > -1) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (e) {
+			console.log(e);
+			return false;
+		}
+	}
+	return false;
+}
 /*
  * 根据账号 返回一个6位随机加密字符串的方法
  * function 
@@ -56,5 +75,6 @@ function sha1(content) {
 module.exports = {
 	generateInviteCode,
 	generateID,
-	sha1
+	sha1,
+	isJSON
 }

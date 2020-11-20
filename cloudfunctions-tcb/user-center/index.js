@@ -80,6 +80,18 @@ exports.main = async (event) => {
 				email: params.email,
 			})
 			break;
+		case "bindMobile":
+			result = await uniID.bindMobile({
+				uid: params.uid,
+				mobile: params.mobile,
+			})
+			break;
+		case "unbindMobile":
+			result = await uniID.unbindMobile({
+				uid: params.uid,
+				mobile: params.mobile,
+			})
+			break;
 		case "loginByWeixin":
 			result = await uniID.loginByWeixin({
 				code: params.code

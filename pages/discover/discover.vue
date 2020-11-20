@@ -55,7 +55,7 @@
 				CustomBar: this.CustomBar,
 				letters: [],
 				moreStatus: 'loading',
-				page: 0,
+				page: 1,
 				pageSize: 15,
 				loading: true,
 				paused: true,

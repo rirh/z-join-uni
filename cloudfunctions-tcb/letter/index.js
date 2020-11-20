@@ -1,7 +1,11 @@
 'use strict';
 const db = uniCloud.database();
 const collection = db.collection('letters');
-const uniID = require('uni-id')
+const uniID = require('uni-id');
+const tools = require('tools');
+const {
+	isJSON
+} = tools
 // 查詢模塊
 const add = require('./add.js');
 const remove = require('./remove.js');
@@ -11,11 +15,14 @@ exports.main = async (event, context) => {
 	//event为客户端上传的参数
 	uniCloud.logger.log('================letter event===============')
 	uniCloud.logger.log(JSON.stringify(event))
+	event = isJSON(event) ? JSON.parse(event) : event;
 	const params = event.action ? event : JSON.parse(event.body);
 	let result = {};
-	result = await uniID.checkToken(params.uniIdToken)
+	let token = params.uniIdToken;
+	if (event.headers) token = event.headers['x-token'];
+	result = await uniID.checkToken(token)
 	if (result.code) return result;
-	const action = params.type || params.action
+	const action = event.action || JSON.parse(event.body).action || JSON.parse(event.body).type || '';
 	switch (action) {
 		case 'insert':
 			result = await add(params);

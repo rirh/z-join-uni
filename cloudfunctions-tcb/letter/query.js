@@ -7,7 +7,8 @@ const collection = db.collection('letters');
 
 module.exports = async function(event) {
 	let pageSize = event.pageSize || 0;
-	let page = event.page || 0;
+	let page = event.page || 1;
+	let skip = (page - 1) * pageSize;
 
 	const uid = event.uid;
 	let where = uid ? {
@@ -17,7 +18,7 @@ module.exports = async function(event) {
 		data=[]
 	} = await collection
 		.where(where)
-		.skip(page * pageSize)
+		.skip(skip)
 		.limit(pageSize)
 		.orderBy("createtime", 'desc')
 		.get();
