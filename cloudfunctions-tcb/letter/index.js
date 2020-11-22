@@ -19,8 +19,9 @@ exports.main = async (event, context) => {
 	const params = event.action ? event : JSON.parse(event.body);
 	let result = {};
 	let token = params.uniIdToken;
-	if (event.headers) token = event.headers['x-token'];
+	if (event.headers && event.headers['x-token']) token = event.headers['x-token'];
 	result = await uniID.checkToken(token)
+	console.log(result);
 	if (result.code) return result;
 	const action = event.action || JSON.parse(event.body).action || JSON.parse(event.body).type || '';
 	switch (action) {
@@ -28,7 +29,7 @@ exports.main = async (event, context) => {
 			result = await add(params);
 			break;
 		case 'delete':
-			const res = remove(params)
+			result = await remove(params)
 			break;
 		case "query":
 			result = await query(params);

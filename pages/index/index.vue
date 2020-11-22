@@ -64,8 +64,8 @@ export default {
 			CustomBar: this.CustomBar,
 			letters: [],
 			moreStatus: 'loading',
-			page: 0,
-			pageSize: 15,
+			page: 1,
+			limit: 15,
 			loading: true
 		};
 	},
@@ -100,7 +100,7 @@ export default {
 	},
 	methods: {
 		async init() {
-			this.page = 0;
+			this.page = 1;
 			this.letters = [];
 			await this.fetchLetters();
 			uni.stopPullDownRefresh();
@@ -113,14 +113,14 @@ export default {
 					action: 'query',
 					uid: uid,
 					page: this.page,
-					pageSize: this.pageSize
+					limit: this.limit
 				}
 			};
 			this.moreStatus = 'loading';
 			await this.$store.dispatch('home/fetchLetters', payload);
 			const { data, total } = this.storeletters.data;
 			this.letters = [...this.letters, ...data];
-			this.moreStatus = this.letters.length + this.page * this.pageSize < total ? 'more' : 'noMore';
+			this.moreStatus = this.letters.length + this.page * this.limit < total ? 'more' : 'noMore';
 			this.loading = false;
 		},
 		handleOpenLoction(loc) {
