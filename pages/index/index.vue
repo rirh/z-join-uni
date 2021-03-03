@@ -1,278 +1,232 @@
 <template>
-	<view class="wapper">
-		<nav-bar background-color="#eee" title="我的个性签名" :shadow="false" :border="false">
-			<!-- <navigator class="navigator" url="/pages/me/edit-signature/edit-signature" slot="left"> -->
-			<image slot="left" class="icon-edit navigator" src="/static/edit.svg" mode="scaleToFill" @click="handle_go_editsig"></image>
-			<!-- </navigator> -->
-		</nav-bar>
-		<view class="content-info">
-			<image class="avatar" :src="user.avatarUrl || `/static/headimg-${user.gender ? 'male' : 'female'}.svg`" mode="scaleToFill"></image>
-			<view class="">
-				<view class="name">
-					<text user-select>{{ user.nickName }}</text>
-				</view>
-				<view class="count">
-					<text user-select>累计发表{{ letters.length }}条个性签名</text>
-				</view>
+	<view>
+		<view class="title">
+			<view class="" v-if="integral>0">
+				<text v-for="item in integral" :key='item'>🥕</text> &nbsp; x {{integral}}
+			</view>
+			<view class="" v-else>
+				分享👇 获得🥕
 			</view>
 		</view>
-		<view class="contant">
-			<view class="latter-wapper">
-				<skeleton :row="rowComputed" animate :loading="loading">
-					<view v-if="letters.length">
-						<view class="letter" @click="handle_go_edit(letter)" v-for="(letter, index) in letters" :key="index">
-							<view class="">
-								<text user-select>{{ letter.desc }}</text>
-							</view>
-							<view class="extr-info" v-if="letter.loction && JSON.parse(letter.loction).name">
-								<view class="tag" @click.stop="handleOpenLoction(letter.loction)">
-									<image class="loc" src="/static/loction-white.svg" mode="scaleToFill"></image>
-									<text class="loc-name">{{ JSON.parse(letter.loction).name }}</text>
-								</view>
-							</view>
-						</view>
-						<load-more v-show="letters.length > 8" :status="moreStatus" />
-					</view>
-					<zEmpty v-else />
-				</skeleton>
-			</view>
+		<textScroll v-if="iswork" :text="tips"></textScroll>
+		<view class="" v-if="integral<=0">
+			<!-- #ifdef MP-WEIXIN -->
+			<button type="default" open-type="share" :disabled="integral>0" @click="handle_buy">获得🥕</button>
+			<!-- #endif -->
+			<!-- #ifndef MP-WEIXIN -->
+			<button type="default" :disabled="integral>0" @click="handle_buy">购买🥕</button>
+			<!-- #endif -->
 		</view>
-		<uni-popup ref="popup" type="dialog"><view class="auth-pop">开始创作我的个性签名。</view></uni-popup>
+		<view class="">
+			<button type="default" :disabled="model===1||integral<=0" @click="handle_do_1">小狐狸🦊缓慢按摩服务</button>
+		</view>
+		<view class="">
+			<button type="default" :disabled="model===2||integral<=0" @click="handle_do_2">小狐狸🦊快速按摩服务</button>
+		</view>
+		<view class="">
+			<button type="default" :disabled="model===3||integral<=0" @click="handle_do_3">小兔子🐰缓慢按摩服务</button>
+		</view>
+		<view class="">
+			<button type="default" :disabled="model===4||integral<=0" @click="handle_do_4">小兔子🐰快速按摩服务</button>
+		</view>
+		<view class="">
+			<button type="default" :disabled="model===5||integral<=0" @click="handle_do_5">小狐狸🦊、小兔子🐰和小公主👸一起高级按摩服务</button>
+		</view>
+		<view class="">
+			<button type="default" :disabled="model===6||integral<=0" @click="handle_do_6">小狐狸🦊、小兔子🐰和小公主👸一起帝王按摩服务</button>
+		</view>
+		<view class="">
+			<button type="default" @click="handle_stop">贤者时间</button>
+		</view>
 	</view>
 </template>
-<script>
-import banner from './swiper.vue';
-import moment from 'moment';
-import { mapGetters } from 'vuex';
-import navBar from 'components/uni-nav-bar/uni-nav-bar.vue';
-import skeleton from 'components/skeleton/skeleton.vue';
-import loadMore from 'components/uni-load-more/uni-load-more.vue';
-import uniPopup from 'components/uni-popup/uni-popup.vue';
-import zEmpty from 'components/z-empty/z-empty.vue';
-export default {
-	components: {
-		navBar,
-		banner,
-		skeleton,
-		loadMore,
-		uniPopup,
-		zEmpty
-	},
-	data() {
-		return {
-			StatusBar: this.StatusBar,
-			CustomBar: this.CustomBar,
-			letters: [],
-			moreStatus: 'loading',
-			page: 1,
-			limit: 15,
-			loading: true
-		};
-	},
-	computed: {
-		...mapGetters({
-			isLogin: 'auth/isLogin',
-			user: 'auth/user',
-			storeletters: 'home/letters'
-		}),
-		rowComputed() {
-			return uni.getSystemInfoSync().windowHeight / 40;
-		}
-	},
 
-	onLoad() {
-		if (!this.isLogin) {
-			uni.navigateTo({
-				url: '/pages/auth/login/login'
-			});
-		}
-		// this.$refs.popup.open()
-	},
-	onShow() {
-		if (!this.letters.length) {
-			this.loading = true;
-			this.init();
-		}
-	},
-	onPullDownRefresh() {
-		this.loading = true;
-		this.init();
-	},
-	methods: {
-		async init() {
-			this.page = 1;
-			this.letters = [];
-			await this.fetchLetters();
-			uni.stopPullDownRefresh();
+<script>
+	import textScroll from './scroll-text.vue'
+
+	function gen_random(min, max) {
+		return parseInt(Math.random() * (max - min + 1) + min, 10)
+	}
+	export default {
+		components: {
+			textScroll
 		},
-		async fetchLetters() {
-			const uid = uni.getStorageSync('uid');
-			const payload = {
-				name: 'letter',
-				data: {
-					action: 'query',
-					uid: uid,
-					page: this.page,
-					limit: this.limit
+		data() {
+			return {
+				integral: 0,
+				iswork: false,
+				model: -1,
+				timer: {},
+				tips: '如果说你是海上的烟火，我是浪货的泡沫，如果说你是海上的烟火，我是浪货的泡沫如果说你是海上的烟火，我是浪货的泡沫',
+				stop_tips_array: [
+					'记得多喝点水哦～',
+					'你也想吃胡萝卜么？',
+					'记住刚刚的美好的时光',
+					'One more time ?',
+					'营养要跟上嗷',
+					'我贤者我自己～',
+					'oh，就是刚刚！美好时光！'
+				]
+
+			}
+		},
+		onShow() {
+			this.integral = uni.getStorageSync("carrot");
+		},
+		onShareAppMessage: function(options) {
+			return {
+				title: '【🐰 SPA】领取🥕 吧！',
+				path: '/pages/index/index',
+			}
+		},
+		methods: {
+			handle_start() {
+				let duration;
+				let type = 'vibrateLong';
+				switch (this.model) {
+					case 1:
+						duration = gen_random(1000, 3000)
+						type = 'vibrateLong';
+						break;
+					case 2:
+						duration = gen_random(1000, 2000)
+						type = 'vibrateLong';
+						break;
+					case 3:
+						duration = 1000
+						type = 'vibrateShort';
+						break;
+					case 4:
+						duration = 500
+						type = 'vibrateShort';
+						break;
+					case 5:
+						duration = 300
+						type = Math.random() >= 0.5 ? 'vibrateLong' : 'vibrateShort';
+						break;
+					case 6:
+						duration = 100
+						type = Math.random() >= 0.5 ? 'vibrateLong' : 'vibrateShort';
+						break;
+					default:
+						break;
 				}
-			};
-			this.moreStatus = 'loading';
-			await this.$store.dispatch('home/fetchLetters', payload);
-			const { data, total } = this.storeletters.data;
-			this.letters = [...this.letters, ...data];
-			this.moreStatus = this.letters.length + this.page * this.limit < total ? 'more' : 'noMore';
-			this.loading = false;
-		},
-		handleOpenLoction(loc) {
-			const { latitude, longitude } = JSON.parse(loc);
-			uni.openLocation({
-				latitude: latitude,
-				longitude: longitude,
-				success: function() {
-					console.log('success');
-				}
-			});
-		},
-		fetchMoreLetters() {
-			if (this.moreStatus === 'noMore') return;
-			this.page = this.page + 1;
-			this.fetchLetters();
-		},
-		handle_go_editsig() {
-			uni.navigateTo({
-				url: '/pages/me/edit-signature/edit-signature'
-			});
-		},
-		handle_go_edit(item) {
-			this.$store.commit('home/updateCurrentLetter', item);
-			uni.navigateTo({
-				url: '/pages/index/record/record'
-			});
+				this.timer = setTimeout(() => {
+					uni[type]({
+						success: () => {
+							if (this.iswork) this.handle_start()
+						}
+					})
+				}, duration)
+			},
+
+
+			handle_do_1() {
+				clearTimeout(this.timer)
+				this.iswork = false;
+				this.model = 1;
+				this.integral -= 1;
+				this.iswork = true;
+				this.handle_tips();
+				this.handle_start()
+			},
+			handle_do_2() {
+				clearTimeout(this.timer)
+				this.iswork = false;
+				this.model = 2;
+				this.integral -= 1;
+				this.iswork = true;
+				this.handle_tips();
+				this.handle_start()
+
+
+			},
+			handle_do_3() {
+				clearTimeout(this.timer)
+
+				this.iswork = false;
+
+				this.model = 3;
+				this.integral -= 1;
+				this.iswork = true;
+				this.handle_tips();
+
+				this.handle_start()
+
+			},
+			handle_do_4() {
+				clearTimeout(this.timer)
+
+				this.iswork = false;
+
+				this.model = 4;
+				this.integral -= 1;
+				this.iswork = true;
+				this.handle_tips();
+
+				this.handle_start()
+
+			},
+			handle_do_5() {
+				clearTimeout(this.timer)
+
+				this.iswork = false;
+
+				this.model = 5;
+				this.integral -= 1;
+				this.iswork = true;
+				this.handle_tips();
+
+				this.handle_start()
+
+			},
+			handle_do_6() {
+				clearTimeout(this.timer)
+
+				this.iswork = false;
+				this.model = 6;
+				this.integral -= 1;
+				this.iswork = true;
+				this.handle_tips();
+				this.handle_start()
+
+			},
+			handle_stop() {
+				this.iswork = false;
+				this.model = -1;
+				clearTimeout(this.timer)
+				const tips = this.stop_tips_array[gen_random(0, this.stop_tips_array.length - 1)]
+				uni.showToast({
+					duration: 2000,
+					title: tips,
+					icon: 'none'
+				})
+			},
+			handle_tips() {
+				uni.showToast({
+					duration: 2000,
+					title: '🥕 -1',
+					icon: 'none'
+				})
+			},
+			handle_buy() {
+				console.log('打开广告源');
+
+			}
 		}
 	}
-};
 </script>
 
-<style lang="scss" scoped>
-page,
-.wapper {
-	background-color: #eee;
-	min-height: 100vh;
-	width: 100vw;
-	// overflow: hidden;
-	display: flex;
-	flex-direction: column;
-
-	.navigator:active {
-		background-color: #eee !important;
-	}
-	.navigator:focus {
-		background-color: #eee !important;
+<style>
+	.title {
+		padding-top: var(--status-bar-height);
+		height: 90px;
+		line-height: 90px;
+		box-sizing: border-box;
+		padding-left: 20px;
 	}
 
-	.icon-edit {
-		height: 40rpx;
-		width: 40rpx;
-		margin-left: 30rpx;
+	button {
+		margin: 10rpx;
 	}
-
-	.content-info {
-		padding: 40rpx;
-		display: flex;
-		align-items: center;
-		color: #333;
-		/* #ifndef APP-PLUS-NVUE */
-		display: flex;
-		position: -webkit-sticky;
-		/* #endif */
-		position: sticky;
-		top: var(--window-top);
-		z-index: 99;
-		background-color: #eee;
-
-		.name {
-			font-weight: 600;
-			font-size: 38rpx;
-			// text-transform: uppercase;
-		}
-
-		.count {
-			color: #666;
-			font-size: 24rpx;
-		}
-	}
-
-	.contant {
-		// flex: 1;
-		// overflow: scroll;
-
-		.skeletion {
-			width: 90vw;
-			margin-left: 5vw;
-		}
-
-		.latter-wapper {
-			padding: 0 40rpx;
-		}
-
-		.extr-info {
-			margin: 10rpx 0;
-			display: flex;
-
-			.tag {
-				display: flex;
-				align-items: center;
-				font-size: 22rpx;
-				color: #fff;
-				background-color: #000;
-				border-radius: 10rpx;
-				padding: 3rpx 15rpx;
-			}
-
-			.loc {
-				margin-right: 8rpx;
-				height: 30rpx;
-				width: 30rpx;
-				padding-bottom: 4rpx;
-			}
-
-			.loc-name {
-				line-height: 22px;
-			}
-		}
-
-		.letter {
-			margin: 20rpx 0rpx;
-			background-color: #f8f8f8;
-			border-radius: 20rpx;
-			padding: 20rpx;
-			word-break: break-all;
-			color: #333;
-			font-size: 28rpx;
-			line-height: 45rpx;
-			word-spacing: 7rpx;
-			box-shadow: 0rpx 3rpx 3rpx -2rpx rgba(0, 0, 0, 0.2), 0rpx 3rpx 4rpx 0rpx rgba(0, 0, 0, 0.14), 0rpx 1rpx 8rpx 0rpx rgba(0, 0, 0, 0.12);
-		}
-
-		.letter:not(first-child) {
-			margin-bottom: 20rpx;
-		}
-	}
-
-	.avatar {
-		height: 100rpx;
-		width: 100rpx;
-		border-radius: 50%;
-		margin-right: 30rpx;
-	}
-}
-
-.auth-pop {
-	background-color: white;
-	height: 90rpx;
-	display: grid;
-	border-radius: 20rpx;
-	place-items: center;
-	padding: 20rpx;
-}
 </style>

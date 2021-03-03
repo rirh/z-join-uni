@@ -1,26 +1,29 @@
 <script>
-	import lib from "lib/utils";
-	const {
-		setStateBar,
-		initPush
-	} = lib;
 	export default {
 		onLaunch: function() {
 			console.log("App Launch");
-			setStateBar();
-			// #ifdef APP-PLUS
-			initPush();
+			uni.setStorageSync("carrot", 6);
+			
+			// #ifdef MP-WEIXIN
+			wx.login({
+				success(res) {
+					if (res.code) {
+						//发起网络请求
+
+					} else {
+						console.log('登录失败！' + res.errMsg);
+					}
+				}
+			});
 			// #endif
 		},
 		onShow: function() {
 			console.log("App Show");
-			const token = uni.getStorageSync('uniIdToken') && uni.getStorageSync('uniIdTokenExpired') > Date.now();
-			if (token) this.$store.dispatch('auth/getUserInfo');
+			uni.setStorageSync("carrot", 6);
 			const store = uni.getStorageSync("store");
 			if (store) {
-				this.$store.replaceState(
-					Object.assign({}, this.$store.state, JSON.parse(store))
-				);
+				const storeData = Object.assign({}, this.$store.state, JSON.parse(store))
+				this.$store.replaceState(storeData);
 			}
 			// #ifdef H5
 			//在页面刷新时将vuex里的信息保存到sessionStorage里
