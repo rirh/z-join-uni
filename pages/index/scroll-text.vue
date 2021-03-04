@@ -39,10 +39,8 @@
 					let query = wx.createSelectorQuery().in(this)
 					query.select('.tip').boundingClientRect(data => {
 						this.tipWidth = data.width
-						console.log('tip', this.tipWidth)
 					}).exec();
 					query.select('.tip-inder').boundingClientRect(data => {
-						console.log('tip-inder', data.width)
 						if (data.width > this.tipWidth) {
 							let w = Number(data.width)
 							let time = Math.round(w / 40)
