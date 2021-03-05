@@ -1,6 +1,5 @@
 {
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
-
 		{
 			"path": "pages/index/index",
 			"style": {
@@ -10,133 +9,8 @@
 			}
 
 		}
-		// {
-		// 	"path": "pages/index/index",
-		// 	"style": {
-		// 		"navigationStyle": "custom",
-		// 		"enablePullDownRefresh": true
-		// 		// "navigationBarBackgroundColor": "#eee",
-		// 		// "backgroundColor": "#eee",
-		// 		// "navigationBarTitleText": "写信"
-
-		// 	}
-		// }, 
-		// {
-		// 	"path": "pages/auth/login/login",
-		// 	"style": {
-		// 		"navigationStyle": "custom"
-		// 	}
-		// }, {
-		// 	"path": "pages/auth/privacy/privacy",
-		// 	"style": {
-		// 		"navigationBarTitleText": "隐私权政策"
-		// 	}
-		// }, {
-		// 	"path": "pages/auth/protocol/protocol",
-		// 	"style": {
-		// 		"navigationBarTitleText": "用户服务协议"
-		// 	}
-		// }, {
-		// 	"path": "pages/discover/discover",
-		// 	// "path": "pages/index/index",
-		// 	"style": {
-		// 		"navigationBarTitleText": "发现",
-		// 		"enablePullDownRefresh": true
-		// 	}
-		// }, {
-		// 	"path": "pages/me/me",
-		// 	"style": {
-		// 		"navigationBarTitleText": "我"
-		// 	}
-		// }, {
-		// 	"path": "pages/me/user-info/user-info",
-		// 	"style": {
-		// 		"navigationBarTitleText": "我的资料",
-		// 		"enablePullDownRefresh": false
-		// 	}
-
-		// }, {
-		// 	"path": "pages/me/profile-photo/profile-photo",
-		// 	"style": {
-		// 		"navigationBarTitleText": "头像",
-		// 		"enablePullDownRefresh": false,
-		// 		"navigationBarBackgroundColor": "#000",
-		// 		"backgroundColor": "#000",
-		// 		"navigationBarTextStyle": "white"
-		// 	}
-
-		// }, {
-		// 	"path": "pages/index/record/record",
-		// 	"style": {
-		// 		"navigationBarTitleText": "见字如见你",
-		// 		"enablePullDownRefresh": false,
-		// 		"navigationBarBackgroundColor": "#eee",
-		// 		"backgroundColor": "#eee"
-		// 	}
-		// }, {
-		// 	"path": "pages/me/security/security",
-		// 	"style": {
-		// 		"navigationBarTitleText": "安全中心",
-		// 		"enablePullDownRefresh": false
-		// 	}
-
-		// }, {
-		// 	"path": "pages/me/nick-name/nick-name",
-		// 	"style": {
-		// 		"navigationBarTitleText": "修改昵称",
-		// 		"enablePullDownRefresh": false
-		// 	}
-
-		// }, {
-		// 	"path": "pages/me/signature/signature",
-		// 	"style": {
-		// 		"navigationBarTitleText": "个性签名",
-		// 		"enablePullDownRefresh": false
-		// 	}
-
-		// }, {
-		// 	"path": "pages/me/edit-signature/edit-signature",
-		// 	"style": {
-		// 		"navigationBarTitleText": "编辑个性签名",
-		// 		"enablePullDownRefresh": false
-		// 	}
-
-		// }, {
-		// 	"path": "pages/me/topic/topic",
-		// 	"style": {
-		// 		"navigationBarTitleText": "申请新增话题",
-		// 		"enablePullDownRefresh": false
-		// 	}
-		// }
-
-
+		
 	],
-	// "tabBar": {
-	// 	"color": "#6E6F74",
-	// 	"selectedColor": "#000",
-	// 	"borderStyle": "black",
-	// 	"fontSize": "12px",
-	// 	"height": "56px",
-	// 	"list": [{
-	// 			"pagePath": "pages/index/index",
-	// 			"text": "首页",
-	// 			"iconPath": "static/tabar/home.png",
-	// 			"selectedIconPath": "static/tabar/home-seleted.png"
-	// 		},
-	// 		{
-	// 			"pagePath": "pages/discover/discover",
-	// 			"text": "发现",
-	// 			"iconPath": "static/tabar/discover.png",
-	// 			"selectedIconPath": "static/tabar/discover-seleted.png"
-	// 		},
-	// 		{
-	// 			"pagePath": "pages/me/me",
-	// 			"text": "我的",
-	// 			"iconPath": "static/tabar/me.png",
-	// 			"selectedIconPath": "static/tabar/me-seleted.png"
-	// 		}
-	// 	]
-	// },
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "Z Join",
